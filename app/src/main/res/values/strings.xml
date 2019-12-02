@@ -3,4 +3,9 @@
     <string name="title_recipes">Recipes</string>
     <string name="title_cookbooks">Cookbooks</string>
     <string name="title_grocery_list">Grocery List</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="instructions">Instructions</string>
+    <string name="add_ingredient">Add Ingredient</string>
+    <string name="add_instruction">Add Instruction</string>
+
 </resources>

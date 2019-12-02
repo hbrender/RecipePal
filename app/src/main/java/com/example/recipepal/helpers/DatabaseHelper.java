@@ -35,13 +35,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // columns for Recipe table
     public static final String IMAGE_RESOURCE = "imageResource";
     public static final String TIME = "time";
-    public static final String CUISINE = "cuisine";
+    public static final String SERVINGS = "servings";
 
     // columns for Instructions table
     public static final String RECIPE_ID = "recipeId";
     public static final String STEP_NUM = "stepNum";
     public static final String CONTENT = "content";
-    public static final String BOOL_TIMER_NEEDED = "boolTimerNeeded";
 
     // Recipe table create statement
     private static final String CREATE_TABLE_RECIPE = "CREATE TABLE " + TABLE_RECIPE + "("
@@ -49,7 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + NAME + " TEXT, "
             + IMAGE_RESOURCE + " INTEGER, "
             + TIME + " TEXT, "
-            + CUISINE + " TEXT)";
+            + SERVINGS + " TEXT)";
 
     // Instruction table create statement
     private static final String CREATE_TABLE_INSTRUCTIONS = "CREATE TABLE " + TABLE_INSTRUCTIONS + "("
@@ -57,7 +56,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + RECIPE_ID  + " INTEGER, "
             + STEP_NUM + " INTEGER, "
             + CONTENT + " TEXT, "
-            + BOOL_TIMER_NEEDED + " INTEGER, "
             + TIME + " TIME, "
             + IMAGE_RESOURCE + " INTEGER, "
             + "PRIMARY KEY(" + ID + ", " + RECIPE_ID + ", " + STEP_NUM + "), "
@@ -112,6 +110,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_GROCERY_LIST + " VALUES(2, 1, 2)");
         db.execSQL("INSERT INTO " + TABLE_GROCERY_LIST + " VALUES(3, 0, 3)");
         db.execSQL("INSERT INTO " + TABLE_GROCERY_LIST + " VALUES(4, 1, 4)");
+
+        db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(1, 'The World''s Easiest Cookies', null, '30 min', '16 cookies')");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(2, 'White Pizza with Pesto Parsely Drizzle', null, '40 min', '8 slices')");
+
+        db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(1, 1, 1, "
+                + "'Preheat the oven to 350°F. Line a cookie sheet or rimmed baking sheet with parchment paper.', "
+                + "0, null)");
+        db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(2, 1, 2, "
+                + "'In bowl, whisk together the (2 cup) almond flour, (1/2 tsp) baking powder, and (1/8 tsp) salt.', "
+                + "0, null)");
+        db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(3, 1, 3, "
+                + "'In same bowl, stir in (1/3 cup) maple syrup and (2 tsp) vanilla and mix until a sticky dough holds together', "
+                + "0, null)");
+        db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(4, 1, 4, "
+                + "'Scoop (1 tbsp) dough and roll it into a round ball and place on the baking sheet. Repeat with the rest of the dough, placing each ball about 2 inches apart.', "
+                + "0, null)");
+        db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(5, 1, 5, "
+                + "'Use your fingers to smush the cookies until they are about 1/2 inch tall.', "
+                + "0, null)");
+        db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(6, 1, 6, "
+                + "'Place the tray in the oven and bake for about 12 minutes, turning the tray 180° at the the halfway point. The cookies are ready when the edges are golden brown.', "
+                + "'12:00:00', null)");
+
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(5, 'almond flour', '2 cups')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(6, 'baking soda', '1/2 tsp')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(7, 'almond flour', '1/8 tsp')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(8, 'almond flour', '1/3 cup')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(9, 'almond flour', '2 tsp')");
+
+        db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(1, 1, 5)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(2, 1, 6)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(3, 1, 7)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(4, 1, 8)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(5, 1, 9)");
     }
 
     @Override
@@ -134,6 +166,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " WHERE g." + INGREDIENT_ID + " = i." + ID;
 
         Log.d(TAG, "getAllGroceryListCursor: " + sqlSelect);
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sqlSelect, null);
+
+        return cursor;
+    }
+
+    public Cursor getAllRecipesCursor() {
+        String sqlSelect = "SELECT * FROM " + TABLE_RECIPE;
+
+        Log.d(TAG, "getAllRecipesCursor: " + sqlSelect);
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sqlSelect, null);
+
+        return cursor;
+    }
+
+    public Cursor getRecipeByIdCursor(int recipeId) {
+        String sqlSelect = "SELECT * FROM " + TABLE_RECIPE + " WHERE " + ID + " = " + recipeId;
+
+        Log.d(TAG, "getRecipeByIdCursor: " + sqlSelect);
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sqlSelect, null);
+
+        return cursor;
+    }
+
+    public Cursor getAllRecipeIngredientsByIdCursor(int recipeId) {
+        String sqlSelect = "SELECT i.* FROM " + TABLE_INGREDIENTS + " i, " + TABLE_RECIPE_INGREDIENTS + " ri"
+                + " WHERE i." + ID + " = ri." + INGREDIENT_ID
+                + " AND ri." + RECIPE_ID + " = '" + recipeId + "'";
+
+        Log.d(TAG, "getAllRecipeIngredientsByIdCursor: " + sqlSelect);
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(sqlSelect, null);
 

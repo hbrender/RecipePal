@@ -41,7 +41,7 @@ public class GroceryListFragment extends Fragment {
     }
 
     /**
-     * Creates layout for the note list view
+     * Creates layout for the grocery list view
      * @param context the context
      */
     public void createGroceryListListView(final Context context) {

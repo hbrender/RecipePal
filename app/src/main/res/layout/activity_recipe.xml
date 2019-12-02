@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+tools:context=".RecipeActivity"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:divider="?android:dividerHorizontal">
+
+<GridLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="1"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/recipeNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recipe Name"
+        android:layout_gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/startRecipeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_button"
+        android:text="Start Recipe"
+        android:onClick="startRecipeButtonOnClick"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+    <View style="@style/Divider"/>
+
+    <TextView
+        android:id="@+id/ingredientsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:text="@string/ingredients" />
+
+    <ListView
+        android:id="@+id/ingredientsListView"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"/>
+
+    <ImageView
+        android:id="@+id/addIngredientButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/ic_add_32dp"
+        android:clickable="true"
+        android:onClick="addIngredientButtonOnClick"
+        android:contentDescription="@string/add_ingredient"/>
+
+    <View style="@style/Divider"/>
+
+    <TextView
+        android:id="@+id/instructionsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:text="@string/instructions" />
+
+    <ListView
+        android:id="@+id/instructionsListView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/addInstructionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/ic_add_32dp"
+        android:clickable="true"
+        android:onClick="addInstructionButtonOnClick"
+        android:contentDescription="@string/add_instruction"/>
+
+</GridLayout>
+</ScrollView>
