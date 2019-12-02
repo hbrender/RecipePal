@@ -12,12 +12,6 @@
         tools:layout="@layout/fragment_recipes" />
 
     <fragment
-        android:id="@+id/navigation_cookbooks"
-        android:name="com.example.recipepal.ui.cookbook.CookbookFragment"
-        android:label="@string/title_cookbooks"
-        tools:layout="@layout/fragment_cookbooks" />
-
-    <fragment
         android:id="@+id/navigation_grocery_list"
         android:name="com.example.recipepal.ui.grocerylist.GroceryListFragment"
         android:label="@string/title_grocery_list"

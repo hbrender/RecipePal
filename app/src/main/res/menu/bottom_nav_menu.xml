@@ -7,11 +7,6 @@
         android:title="@string/title_recipes" />
 
     <item
-        android:id="@+id/navigation_cookbooks"
-        android:icon="@drawable/cookbook"
-        android:title="@string/title_cookbooks" />
-
-    <item
         android:id="@+id/navigation_grocery_list"
         android:icon="@drawable/grocery_list"
         android:title="@string/title_grocery_list" />
