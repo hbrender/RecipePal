@@ -118,13 +118,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "'Preheat the oven to 350°F. Line a cookie sheet or rimmed baking sheet with parchment paper.', "
                 + "0, null)");
         db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(2, 1, 2, "
-                + "'In bowl, whisk together the (2 cup) almond flour, (1/2 tsp) baking powder, and (1/8 tsp) salt.', "
+                + "'In bowl, whisk together the almond flour, baking powder, and salt.', "
                 + "0, null)");
         db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(3, 1, 3, "
-                + "'In same bowl, stir in (1/3 cup) maple syrup and (2 tsp) vanilla and mix until a sticky dough holds together', "
+                + "'In same bowl, stir in maple syrup and vanilla and mix until a sticky dough holds together', "
                 + "0, null)");
         db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(4, 1, 4, "
-                + "'Scoop (1 tbsp) dough and roll it into a round ball and place on the baking sheet. Repeat with the rest of the dough, placing each ball about 2 inches apart.', "
+                + "'Scoop 1 tbsp dough and roll it into a round ball and place on the baking sheet. Repeat with the rest of the dough, placing each ball about 2 inches apart.', "
                 + "0, null)");
         db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(5, 1, 5, "
                 + "'Use your fingers to smush the cookies until they are about 1/2 inch tall.', "

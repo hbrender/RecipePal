@@ -57,7 +57,7 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     public void setRecipeInfo() {
-        Cursor cursor = databaseHelper.getRecipeByIdCursor(recipeId);
+        final Cursor cursor = databaseHelper.getRecipeByIdCursor(recipeId);
         if (cursor.getColumnCount() > 0 && cursor.moveToPosition(0)) {
             recipeNameTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
         }
@@ -99,9 +99,11 @@ public class RecipeActivity extends AppCompatActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
 
+                TextView stepTextView = view.findViewById(R.id.stepTextView);
                 TextView instructionContextTextView = view.findViewById(R.id.instructionContextTextView);
 
                 if (cursor3.moveToPosition(position)) {
+                    stepTextView.setText(cursor3.getInt(cursor3.getColumnIndex(DatabaseHelper.STEP_NUM)) + ".");
                     instructionContextTextView.setText(cursor3.getString(cursor3.getColumnIndex(DatabaseHelper.CONTENT)));
                 }
 

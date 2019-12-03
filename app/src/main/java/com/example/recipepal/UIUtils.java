@@ -5,8 +5,9 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class UIUtils {
+// from: https://stackoverflow.com/questions/1778485/android-listview-display-all-available-items-without-scroll-with-static-header/1958482
 
+public class UIUtils {
     /**
      * Sets ListView height dynamically based on the height of the items.
      *
