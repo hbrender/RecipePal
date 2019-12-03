@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/activatedBackgroundIndicator">
+
+    <TextView
+        android:id="@+id/recipeTitleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/activatedBackgroundIndicator"
+        android:gravity="center_vertical"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+    <CheckBox
+        android:id="@+id/favoriteCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:button="@drawable/favorite_check_box" />
+
+</LinearLayout>

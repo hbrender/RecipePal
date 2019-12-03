@@ -59,19 +59,19 @@ public class RecipeFragment extends Fragment {
         final Cursor cursor = databaseHelper.getAllRecipesCursor();
         simpleCursorAdapter = new SimpleCursorAdapter(
                 context,
-                android.R.layout.simple_list_item_activated_1,
+                R.layout.recipe_list_row,
                 cursor,
                 new String[] {DatabaseHelper.NAME},
-                new int[] {R.id.recipeNameTextView},
+                new int[] {R.id.recipeTitleTextView},
                 0) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
 
-                TextView textView1 = view.findViewById(android.R.id.text1);
+                TextView recipeTitleTextView = view.findViewById(R.id.recipeTitleTextView);
 
                 if (cursor.moveToPosition(position)) {
-                    textView1.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+                    recipeTitleTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
                 }
 
                 return view;
