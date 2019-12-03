@@ -11,7 +11,7 @@ android:divider="?android:dividerHorizontal">
 <GridLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:columnCount="1"
+    android:columnCount="2"
     android:padding="10dp">
 
     <TextView
@@ -19,6 +19,7 @@ android:divider="?android:dividerHorizontal">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Recipe Name"
+        android:layout_columnSpan="2"
         android:layout_gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp" />
@@ -31,9 +32,28 @@ android:divider="?android:dividerHorizontal">
         android:layout_margin="10dp"
         android:background="@drawable/rounded_button"
         android:text="Start Recipe"
+        android:layout_columnSpan="2"
         android:onClick="startRecipeButtonOnClick"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/totalTimeTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_marginLeft="70dp"
+        android:drawableLeft="@drawable/ic_access_time_24dp"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/servingsTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="70dp"
+        android:layout_columnWeight="1"
+        android:drawableLeft="@drawable/ic_pie_chart_outlined_24dp"
+        android:textSize="15dp"/>
 
     <View style="@style/Divider"/>
 
@@ -42,12 +62,14 @@ android:divider="?android:dividerHorizontal">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16dp"
+        android:layout_columnSpan="2"
         android:text="@string/ingredients" />
 
     <ListView
         android:id="@+id/ingredientsListView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_columnSpan="2"
         android:minHeight="?android:attr/listPreferredItemHeight"/>
 
     <ImageView
@@ -56,6 +78,7 @@ android:divider="?android:dividerHorizontal">
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@drawable/ic_add_32dp"
+        android:layout_columnSpan="2"
         android:clickable="true"
         android:onClick="addIngredientButtonOnClick"
         android:contentDescription="@string/add_ingredient"/>
@@ -66,6 +89,7 @@ android:divider="?android:dividerHorizontal">
         android:id="@+id/instructionsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_columnSpan="2"
         android:textSize="16dp"
         android:text="@string/instructions" />
 
@@ -73,6 +97,7 @@ android:divider="?android:dividerHorizontal">
         android:id="@+id/instructionsListView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_columnSpan="2"
         android:minHeight="?android:attr/listPreferredItemHeight"/>
 
     <ImageView
@@ -82,6 +107,7 @@ android:divider="?android:dividerHorizontal">
         android:layout_margin="10dp"
         android:background="@drawable/ic_add_32dp"
         android:clickable="true"
+        android:layout_columnSpan="2"
         android:onClick="addInstructionButtonOnClick"
         android:contentDescription="@string/add_instruction"/>
 

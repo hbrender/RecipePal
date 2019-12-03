@@ -28,6 +28,8 @@ public class RecipeActivity extends AppCompatActivity {
     int recipeId;
 
     TextView recipeNameTextView;
+    TextView totalTimeTextView;
+    TextView servingsTextView;
     ListView ingredientsListView;
     ListView instructionListView;
     SimpleCursorAdapter ingredientsAdapter;
@@ -43,6 +45,8 @@ public class RecipeActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
 
         recipeNameTextView = findViewById(R.id.recipeNameTextView);
+        totalTimeTextView = findViewById(R.id.totalTimeTextView);
+        servingsTextView = findViewById(R.id.servingsTextView);
         ingredientsListView = findViewById(R.id.ingredientsListView);
         instructionListView = findViewById(R.id.instructionsListView);
 
@@ -60,6 +64,8 @@ public class RecipeActivity extends AppCompatActivity {
         final Cursor cursor = databaseHelper.getRecipeByIdCursor(recipeId);
         if (cursor.getColumnCount() > 0 && cursor.moveToPosition(0)) {
             recipeNameTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+            totalTimeTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)));
+            servingsTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)));
         }
 
         final Cursor cursor2 = databaseHelper.getAllRecipeIngredientsByIdCursor(recipeId);
