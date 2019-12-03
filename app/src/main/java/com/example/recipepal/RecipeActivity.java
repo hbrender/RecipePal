@@ -39,6 +39,7 @@ public class RecipeActivity extends AppCompatActivity {
 
         recipeNameTextView = findViewById(R.id.recipeNameTextView);
         ingredientsListView = findViewById(R.id.ingredientsListView);
+        instructionListView = findViewById(R.id.instructionsListView);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -80,6 +81,29 @@ public class RecipeActivity extends AppCompatActivity {
             }
         };
         ingredientsListView.setAdapter(ingredientsAdapter);
+
+        final Cursor cursor3 = databaseHelper.getAllRecipeInstructionsByIdCursor(recipeId);
+        instructionsAdapter = new SimpleCursorAdapter(
+                this,
+                R.layout.instruction_list_row,
+                cursor3,
+                new String[] {DatabaseHelper.CONTENT},
+                new int[] {R.id.instructionContextTextView},
+                0) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+
+                TextView instructionContextTextView = view.findViewById(R.id.instructionContextTextView);
+
+                if (cursor3.moveToPosition(position)) {
+                    instructionContextTextView.setText(cursor3.getString(cursor3.getColumnIndex(DatabaseHelper.CONTENT)));
+                }
+
+                return view;
+            }
+        };
+        instructionListView.setAdapter(instructionsAdapter);
     }
 
     public void startRecipeButtonOnClick(View view) {

@@ -203,4 +203,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return cursor;
     }
+
+    public Cursor getAllRecipeInstructionsByIdCursor(int recipeId) {
+        String sqlSelect = "SELECT i.* FROM " + TABLE_INSTRUCTIONS + " i, " + TABLE_RECIPE + " r"
+                + " WHERE i." + RECIPE_ID + " = r." + ID
+                + " AND r." + ID + " = '" + recipeId + "'";
+
+        Log.d(TAG, "getAllRecipeInstructionsByIdCursor: " + sqlSelect);
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sqlSelect, null);
+
+        return cursor;
+    }
 }

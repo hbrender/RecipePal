@@ -47,7 +47,7 @@ android:divider="?android:dividerHorizontal">
     <ListView
         android:id="@+id/ingredientsListView"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"/>
+        android:layout_height="match_parent"/>
 
     <ImageView
         android:id="@+id/addIngredientButton"
@@ -71,7 +71,7 @@ android:divider="?android:dividerHorizontal">
     <ListView
         android:id="@+id/instructionsListView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
     <ImageView
         android:id="@+id/addInstructionButton"
