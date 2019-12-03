@@ -109,6 +109,9 @@ public class RecipeActivity extends AppCompatActivity {
             }
         };
         instructionListView.setAdapter(instructionsAdapter);
+
+        UIUtils.setListViewHeightBasedOnItems(ingredientsListView);
+        UIUtils.setListViewHeightBasedOnItems(instructionListView);
     }
 
     public void startRecipeButtonOnClick(View view) {
