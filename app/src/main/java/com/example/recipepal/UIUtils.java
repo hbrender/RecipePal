@@ -46,14 +46,11 @@ public class UIUtils {
                     int lines = t.getLineCount();
 
                     totalItemsHeight += item.getMeasuredHeight() * 2;
-                    Log.d("UIUtils", "setListViewHeightBasedOnItems: " + lines);
-                    Log.d("UIUtils", "setListViewHeightBasedOnItems: " + item.getMeasuredHeight() * lines);
 
                 } else {
                     View item = listAdapter.getView(itemPos, null, listView);
                     item.measure(0, 0);
                     totalItemsHeight += item.getMeasuredHeight();
-                    Log.d("hi", "setListViewHeightBasedOnItems: " + item.getMeasuredHeight());
                 }
             }
 

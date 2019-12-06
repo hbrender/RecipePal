@@ -8,5 +8,7 @@
     <string name="add_ingredient">Add Ingredient</string>
     <string name="add_instruction">Add Instruction</string>
     <string name="ingredients_added">Ingredients have been added to Grocery List.</string>
+    <string name="label_save">Save</string>
+    <string name="label_edit">Edit</string>
 
 </resources>

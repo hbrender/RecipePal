@@ -3,19 +3,17 @@ package com.example.recipepal;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -24,8 +22,6 @@ import android.widget.Toast;
 
 import com.example.recipepal.helpers.DatabaseHelper;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Date;
 
 //https://www.youtube.com/watch?v=plQIpqBcdQE (referenced for custom circular button)
 //https://stackoverflow.com/questions/6210895/listview-inside-scrollview-is-not-scrolling-on-android/6211286#6211286 (referenced for listview touch listener)
@@ -41,15 +37,18 @@ public class RecipeInfoActivity extends AppCompatActivity {
     ListView ingredientsListView;
     ListView instructionListView;
     Button addIngredientsButton;
+    MenuItem editMenuItem;
+    MenuItem saveMenuItem;
     SimpleCursorAdapter ingredientsAdapter;
     SimpleCursorAdapter instructionsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe);
+        setContentView(R.layout.activity_recipe_info);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // home button
+        getSupportActionBar().setDisplayShowTitleEnabled(false); // no title
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -74,8 +73,8 @@ public class RecipeInfoActivity extends AppCompatActivity {
         final Cursor cursor = databaseHelper.getRecipeByIdCursor(recipeId);
         if (cursor.getColumnCount() > 0 && cursor.moveToPosition(0)) {
             recipeNameTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-            totalTimeTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)));
-            servingsTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)));
+            totalTimeTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)));
+            servingsTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)));
         }
 
         final Cursor cursor2 = databaseHelper.getAllRecipeIngredientsByIdCursor(recipeId);
@@ -103,7 +102,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
         };
         ingredientsListView.setAdapter(ingredientsAdapter);
 
-        ingredientsListView.setOnTouchListener(new ListView.OnTouchListener() {
+        /*ingredientsListView.setOnTouchListener(new ListView.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int action = event.getAction();
@@ -123,7 +122,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
                 v.onTouchEvent(event);
                 return true;
             }
-        });
+        });*/
 
         final Cursor cursor3 = databaseHelper.getAllRecipeInstructionsByIdCursor(recipeId);
         instructionsAdapter = new SimpleCursorAdapter(
@@ -186,8 +185,35 @@ public class RecipeInfoActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.editMenuItem:
+                // enable editing
+                editMenuItem.setVisible(false);
+                saveMenuItem.setVisible(true);
+                return true;
+            case R.id.saveMenuItem:
+                // check if recipe info can be saved with no errors
+                editMenuItem.setVisible(true);
+                saveMenuItem.setVisible(false);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.recipe_info_menu, menu);
+
+        editMenuItem = menu.findItem(R.id.editMenuItem);
+        saveMenuItem = menu.findItem(R.id.saveMenuItem);
+
+        if (recipeId == -1) {
+            editMenuItem.setVisible(false);
+            saveMenuItem.setVisible(true);
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 }
