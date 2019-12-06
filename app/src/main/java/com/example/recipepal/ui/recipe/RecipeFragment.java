@@ -24,6 +24,7 @@ import com.example.recipepal.helpers.DatabaseHelper;
 
 // https://syedasaraahmed.wordpress.com/2012/10/03/android-onitemclicklistener-not-responding-clickable-rowitem-of-custom-listview/ (referenced for listview with button component)
 // https://stackoverflow.com/questions/3965484/custom-checkbox-image-android (referenced for custom checkbox)
+// https://stackoverflow.com/questions/15941635/how-to-add-a-listener-for-checkboxes-in-an-adapter-view-android-arrayadapter (listener for checkbox in listview)
 
 public class RecipeFragment extends Fragment {
     static final String TAG = "RecipeFragment";

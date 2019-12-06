@@ -59,9 +59,13 @@ public class GroceryListFragment extends Fragment {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
 
-                CheckBox checkBox = view.findViewById(R.id.checkBox);
+                final CheckBox checkBox = view.findViewById(R.id.checkBox);
                 TextView amountTextView = view.findViewById(R.id.amountTextView);
                 TextView nameTextView = view.findViewById(R.id.nameTextView);
+
+                // attach id to checkbox for updating
+                int recipeId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ID));
+                checkBox.setTag(recipeId);
 
                 if (cursor.moveToPosition(position)) {
                     amountTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.AMOUNT)));
@@ -73,6 +77,18 @@ public class GroceryListFragment extends Fragment {
                         checkBox.setChecked(true);
                     }
                 }
+
+                checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View arg0) {
+                        // update if grocery item is checked or not
+                        if (checkBox.isChecked()) {
+                            databaseHelper.updateGroceryItemChecked((int) checkBox.getTag(), 1);
+                        } else {
+                            databaseHelper.updateGroceryItemChecked((int) checkBox.getTag(), 0);
+                        }
+                    }
+                });
 
                 return view;
             }

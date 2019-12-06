@@ -226,4 +226,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(sqlUpdate);
         db.close();
     }
+
+    public void updateGroceryItemChecked(int groceryId, int favorited) {
+        String sqlUpdate = "UPDATE " + TABLE_GROCERY_LIST + " SET " + CHECKED + " = "
+                + favorited + " WHERE " + ID + " = " + groceryId;
+
+        Log.d(TAG, "updateGroceryItemChecked: " + sqlUpdate);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sqlUpdate);
+        db.close();
+    }
 }
