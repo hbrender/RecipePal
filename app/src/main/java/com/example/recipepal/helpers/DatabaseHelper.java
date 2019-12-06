@@ -215,4 +215,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return cursor;
     }
+
+    public void updateRecipeFavorite(int recipeId, int favorited) {
+        String sqlUpdate = "UPDATE " + TABLE_RECIPE + " SET " + FAVORITED + " = "
+                + favorited + " WHERE " + ID + " = " + recipeId;
+
+        Log.d(TAG, "updateRecipeFavorite: " + sqlUpdate);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sqlUpdate);
+        db.close();
+    }
 }

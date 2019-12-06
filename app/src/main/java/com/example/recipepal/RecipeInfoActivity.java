@@ -22,6 +22,8 @@ import com.example.recipepal.helpers.DatabaseHelper;
 
 import java.util.Date;
 
+//https://www.youtube.com/watch?v=plQIpqBcdQE (referenced for custom circular button)
+
 public class RecipeInfoActivity extends AppCompatActivity {
     static final String TAG = "RecipeActivityTag";
     DatabaseHelper databaseHelper;
