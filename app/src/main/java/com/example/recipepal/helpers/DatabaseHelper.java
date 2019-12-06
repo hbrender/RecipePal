@@ -78,10 +78,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // GroceryList create statement
     private static final String CREATE_TABLE_GROCERY_LIST = "CREATE TABLE " + TABLE_GROCERY_LIST + "("
-            + ID + " INTEGER, "
+            + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + CHECKED + " INTEGER, "
             + INGREDIENT_ID + " INTEGER,"
-            + " PRIMARY KEY(" + ID + ", " + INGREDIENT_ID + "),"
             + " FOREIGN KEY(" + INGREDIENT_ID + ") REFERENCES " + TABLE_INGREDIENTS + "(" + ID + "))";
 
     public DatabaseHelper(Context context) {
@@ -160,6 +159,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Get all grocery list items
+     * @return cursor
+     */
     public Cursor getAllGroceryListCursor() {
         String sqlSelect = "SELECT i.*, g." + CHECKED
                 + " FROM " + TABLE_INGREDIENTS + " i, " + TABLE_GROCERY_LIST + " g"
@@ -172,6 +175,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    /**
+     * Get all recipes
+     * @return cursor
+     */
     public Cursor getAllRecipesCursor() {
         String sqlSelect = "SELECT * FROM " + TABLE_RECIPE;
 
@@ -182,6 +189,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    /**
+     * Get a recipe given an id
+     * @param recipeId
+     * @return cursor
+     */
     public Cursor getRecipeByIdCursor(int recipeId) {
         String sqlSelect = "SELECT * FROM " + TABLE_RECIPE + " WHERE " + ID + " = " + recipeId;
 
@@ -192,6 +204,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    /**
+     * Get all recipe ingredients for a specific recipe
+     * @param recipeId
+     * @return cursor
+     */
     public Cursor getAllRecipeIngredientsByIdCursor(int recipeId) {
         String sqlSelect = "SELECT i.* FROM " + TABLE_INGREDIENTS + " i, " + TABLE_RECIPE_INGREDIENTS + " ri"
                 + " WHERE i." + ID + " = ri." + INGREDIENT_ID
@@ -204,6 +221,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    /**
+     * Get all recipe instructions for a specific recipe
+     * @param recipeId
+     * @return cursor
+     */
     public Cursor getAllRecipeInstructionsByIdCursor(int recipeId) {
         String sqlSelect = "SELECT i.* FROM " + TABLE_INSTRUCTIONS + " i, " + TABLE_RECIPE + " r"
                 + " WHERE i." + RECIPE_ID + " = r." + ID
@@ -216,6 +238,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    /**
+     * Update a recipe "favorited" status
+     * @param recipeId
+     * @param favorited
+     */
     public void updateRecipeFavorite(int recipeId, int favorited) {
         String sqlUpdate = "UPDATE " + TABLE_RECIPE + " SET " + FAVORITED + " = "
                 + favorited + " WHERE " + ID + " = " + recipeId;
@@ -227,6 +254,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Update a grocery list item "checked" status
+     * @param groceryId
+     * @param favorited
+     */
     public void updateGroceryItemChecked(int groceryId, int favorited) {
         String sqlUpdate = "UPDATE " + TABLE_GROCERY_LIST + " SET " + CHECKED + " = "
                 + favorited + " WHERE " + ID + " = " + groceryId;
@@ -235,6 +267,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(sqlUpdate);
+        db.close();
+    }
+
+    public void insertGroceryListItem(int ingredientId) {
+        String sqlInsert = "INSERT INTO " + TABLE_GROCERY_LIST + " VALUES(null, 0, "
+                + ingredientId + ")";
+
+        Log.d(TAG, "insertGroceryListItem: " + sqlInsert);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sqlInsert);
         db.close();
     }
 }

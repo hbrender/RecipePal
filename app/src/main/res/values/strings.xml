@@ -7,5 +7,6 @@
     <string name="instructions">Instructions</string>
     <string name="add_ingredient">Add Ingredient</string>
     <string name="add_instruction">Add Instruction</string>
+    <string name="ingredients_added">Ingredients have been added to Grocery List.</string>
 
 </resources>

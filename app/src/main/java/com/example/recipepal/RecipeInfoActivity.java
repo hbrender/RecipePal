@@ -6,19 +6,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipepal.helpers.DatabaseHelper;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Date;
 
@@ -34,6 +38,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
     TextView servingsTextView;
     ListView ingredientsListView;
     ListView instructionListView;
+    Button addIngredientsButton;
     SimpleCursorAdapter ingredientsAdapter;
     SimpleCursorAdapter instructionsAdapter;
 
@@ -51,6 +56,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
         servingsTextView = findViewById(R.id.servingsTextView);
         ingredientsListView = findViewById(R.id.ingredientsListView);
         instructionListView = findViewById(R.id.instructionsListView);
+        addIngredientsButton = findViewById(R.id.addToGroceryListButton);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -129,7 +135,19 @@ public class RecipeInfoActivity extends AppCompatActivity {
     }
 
     public void addIngredientButtonOnClick(View view) {
-        Toast.makeText(this, "TODO: add ingredient", Toast.LENGTH_SHORT).show();
+        if (addIngredientsButton.getText().toString().compareTo(getString(R.string.title_grocery_list)) == 0) {
+            // get all recipe ingredients
+            Cursor c = databaseHelper.getAllRecipeIngredientsByIdCursor(recipeId);
+
+            // for each recipe ingredient add to the grocery list
+            while(c.moveToNext()) {
+                databaseHelper.insertGroceryListItem(c.getInt(c.getColumnIndex(DatabaseHelper.ID)));
+            }
+
+            GridLayout gridLayout = findViewById(R.id.gridLayout);
+            Snackbar snackbar = Snackbar.make(gridLayout, getString(R.string.ingredients_added), Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
     }
 
     public void addInstructionButtonOnClick(View view) {

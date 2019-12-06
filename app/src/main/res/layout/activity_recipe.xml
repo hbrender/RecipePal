@@ -9,6 +9,7 @@ android:layout_height="match_parent"
 android:divider="?android:dividerHorizontal">
 
 <GridLayout
+    android:id="@+id/gridLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:columnCount="2"
@@ -39,19 +40,19 @@ android:divider="?android:dividerHorizontal">
 
     <TextView
         android:id="@+id/totalTimeTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_columnWeight="1"
+        android:layout_columnSpan="1"
         android:layout_marginLeft="70dp"
         android:drawableLeft="@drawable/ic_access_time_24dp"
         android:textSize="15dp" />
 
     <TextView
         android:id="@+id/servingsTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="70dp"
-        android:layout_columnWeight="1"
+        android:layout_columnSpan="1"
+        android:layout_marginLeft="70dp"
         android:drawableLeft="@drawable/ic_pie_chart_outlined_24dp"
         android:textSize="15dp"/>
 
@@ -61,9 +62,24 @@ android:divider="?android:dividerHorizontal">
         android:id="@+id/ingredientsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal"
         android:textSize="16dp"
-        android:layout_columnSpan="2"
+        android:layout_columnSpan="1"
         android:text="@string/ingredients" />
+
+    <Button
+        android:id="@+id/addToGroceryListButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:layout_columnSpan="1"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center|end"
+        android:onClick="addIngredientButtonOnClick"
+        android:background="@null"
+        android:textColor="@color/colorPrimaryDark"
+        android:drawableRight="@drawable/ic_add_24dp"
+        android:text="@string/title_grocery_list" />
 
     <ListView
         android:id="@+id/ingredientsListView"
