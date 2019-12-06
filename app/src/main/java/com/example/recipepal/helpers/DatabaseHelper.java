@@ -36,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String IMAGE_RESOURCE = "imageResource";
     public static final String TIME = "time";
     public static final String SERVINGS = "servings";
+    public static final String FAVORITED = "favorited";
 
     // columns for Instructions table
     public static final String RECIPE_ID = "recipeId";
@@ -48,7 +49,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + NAME + " TEXT, "
             + IMAGE_RESOURCE + " INTEGER, "
             + TIME + " TEXT, "
-            + SERVINGS + " TEXT)";
+            + SERVINGS + " TEXT, "
+            + FAVORITED + " INTEGER)";
 
     // Instruction table create statement
     private static final String CREATE_TABLE_INSTRUCTIONS = "CREATE TABLE " + TABLE_INSTRUCTIONS + "("
@@ -74,7 +76,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " FOREIGN KEY(" + RECIPE_ID + ") REFERENCES " + RECIPE_ID + "(" + ID + "), "
             + " FOREIGN KEY(" + INGREDIENT_ID + ") REFERENCES " + TABLE_INGREDIENTS + "(" + ID + "))";
 
-
     // GroceryList create statement
     private static final String CREATE_TABLE_GROCERY_LIST = "CREATE TABLE " + TABLE_GROCERY_LIST + "("
             + ID + " INTEGER, "
@@ -82,7 +83,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + INGREDIENT_ID + " INTEGER,"
             + " PRIMARY KEY(" + ID + ", " + INGREDIENT_ID + "),"
             + " FOREIGN KEY(" + INGREDIENT_ID + ") REFERENCES " + TABLE_INGREDIENTS + "(" + ID + "))";
-
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -111,8 +111,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_GROCERY_LIST + " VALUES(3, 0, 3)");
         db.execSQL("INSERT INTO " + TABLE_GROCERY_LIST + " VALUES(4, 1, 4)");
 
-        db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(1, 'The World''s Easiest Cookies', null, '30 min', '16 cookies')");
-        db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(2, 'White Pizza with Pesto Parsely Drizzle', null, '40 min', '8 slices')");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(1, 'The World''s Easiest Cookies', null, '30 min', '16 cookies', 1)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(2, 'White Pizza with Pesto Parsely Drizzle', null, '40 min', '8 slices', 0)");
 
         db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(1, 1, 1, "
                 + "'Preheat the oven to 350°F. Line a cookie sheet or rimmed baking sheet with parchment paper.', "

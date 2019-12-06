@@ -3,6 +3,7 @@ package com.example.recipepal.ui.grocerylist;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,7 @@ public class GroceryListFragment extends Fragment {
                     amountTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.AMOUNT)));
                     nameTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
 
-                    if (cursor.getInt(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CHECKED))) == 0) {
+                    if (cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CHECKED)) == 0) {
                         checkBox.setChecked(false);
                     } else {
                         checkBox.setChecked(true);

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -66,9 +67,16 @@ public class RecipeFragment extends Fragment {
                 View view = super.getView(position, convertView, parent);
 
                 TextView recipeTitleTextView = view.findViewById(R.id.recipeTitleTextView);
+                CheckBox favoriteCheckBox = view.findViewById(R.id.favoriteCheckBox);
 
                 if (cursor.moveToPosition(position)) {
                     recipeTitleTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+
+                    if (cursor.getInt(cursor.getColumnIndex(DatabaseHelper.FAVORITED)) == 0) {
+                        favoriteCheckBox.setChecked(false);
+                    } else {
+                        favoriteCheckBox.setChecked(true);
+                    }
                 }
 
                 return view;
