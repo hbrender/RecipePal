@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Date;
 
 //https://www.youtube.com/watch?v=plQIpqBcdQE (referenced for custom circular button)
+//https://stackoverflow.com/questions/6210895/listview-inside-scrollview-is-not-scrolling-on-android/6211286#6211286 (referenced for listview touch listener)
 
 public class RecipeInfoActivity extends AppCompatActivity {
     static final String TAG = "RecipeActivityTag";
@@ -101,6 +103,28 @@ public class RecipeInfoActivity extends AppCompatActivity {
         };
         ingredientsListView.setAdapter(ingredientsAdapter);
 
+        ingredientsListView.setOnTouchListener(new ListView.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
+
+                // Handle ListView touch events.
+                v.onTouchEvent(event);
+                return true;
+            }
+        });
+
         final Cursor cursor3 = databaseHelper.getAllRecipeInstructionsByIdCursor(recipeId);
         instructionsAdapter = new SimpleCursorAdapter(
                 this,
@@ -126,8 +150,8 @@ public class RecipeInfoActivity extends AppCompatActivity {
         };
         instructionListView.setAdapter(instructionsAdapter);
 
-        UIUtils.setListViewHeightBasedOnItems(ingredientsListView);
-        UIUtils.setListViewHeightBasedOnItems(instructionListView);
+        UIUtils.setListViewHeightBasedOnItems(ingredientsListView, this);
+        UIUtils.setListViewHeightBasedOnItems(instructionListView, this);
     }
 
     public void startRecipeButtonOnClick(View view) {

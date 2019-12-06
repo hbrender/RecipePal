@@ -88,17 +88,6 @@ android:divider="?android:dividerHorizontal">
         android:layout_columnSpan="2"
         android:minHeight="?android:attr/listPreferredItemHeight"/>
 
-    <ImageView
-        android:id="@+id/addIngredientButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/ic_add_32dp"
-        android:layout_columnSpan="2"
-        android:clickable="true"
-        android:onClick="addIngredientButtonOnClick"
-        android:contentDescription="@string/add_ingredient"/>
-
     <View style="@style/Divider"/>
 
     <TextView
@@ -115,17 +104,6 @@ android:divider="?android:dividerHorizontal">
         android:layout_height="match_parent"
         android:layout_columnSpan="2"
         android:minHeight="?android:attr/listPreferredItemHeight"/>
-
-    <ImageView
-        android:id="@+id/addInstructionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/ic_add_32dp"
-        android:clickable="true"
-        android:layout_columnSpan="2"
-        android:onClick="addInstructionButtonOnClick"
-        android:contentDescription="@string/add_instruction"/>
 
 </GridLayout>
 </ScrollView>
