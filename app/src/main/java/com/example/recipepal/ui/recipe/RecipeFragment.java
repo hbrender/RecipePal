@@ -9,23 +9,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.recipepal.R;
-import com.example.recipepal.RecipeActivity;
+import com.example.recipepal.RecipeInfoActivity;
 import com.example.recipepal.helpers.DatabaseHelper;
+
+// https://syedasaraahmed.wordpress.com/2012/10/03/android-onitemclicklistener-not-responding-clickable-rowitem-of-custom-listview/
+//
 
 public class RecipeFragment extends Fragment {
     static final String TAG = "RecipeFragment";
@@ -59,16 +56,16 @@ public class RecipeFragment extends Fragment {
         final Cursor cursor = databaseHelper.getAllRecipesCursor();
         simpleCursorAdapter = new SimpleCursorAdapter(
                 context,
-                android.R.layout.simple_list_item_activated_1,
+                R.layout.recipe_list_row,
                 cursor,
                 new String[] {DatabaseHelper.NAME},
-                new int[] {android.R.id.text1},
+                new int[] {R.id.recipeTitleTextView},
                 0) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
 
-                TextView recipeTitleTextView = view.findViewById(android.R.id.text1);
+                TextView recipeTitleTextView = view.findViewById(R.id.recipeTitleTextView);
 
                 if (cursor.moveToPosition(position)) {
                     recipeTitleTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
@@ -93,7 +90,7 @@ public class RecipeFragment extends Fragment {
 
             int recipeId = cursor.getInt(0);
 
-            Intent intent = new Intent(getActivity(), RecipeActivity.class);
+            Intent intent = new Intent(getActivity(), RecipeInfoActivity.class);
             intent.putExtra("recipeId", recipeId);
             startActivity(intent);
         }

@@ -22,7 +22,7 @@ import com.example.recipepal.helpers.DatabaseHelper;
 
 import java.util.Date;
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeInfoActivity extends AppCompatActivity {
     static final String TAG = "RecipeActivityTag";
     DatabaseHelper databaseHelper;
     int recipeId;

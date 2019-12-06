@@ -3,11 +3,12 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/activatedBackgroundIndicator">
+    android:background="?android:attr/activatedBackgroundIndicator"
+    android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:id="@+id/recipeTitleTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?android:attr/activatedBackgroundIndicator"
         android:gravity="center_vertical"
@@ -18,8 +19,9 @@
 
     <CheckBox
         android:id="@+id/favoriteCheckBox"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:button="@drawable/favorite_check_box" />
+
 
 </LinearLayout>
