@@ -1,10 +1,12 @@
-package com.example.recipepal.ui.grocerylist;
+package com.example.recipepal.fragments;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -31,6 +33,7 @@ public class GroceryListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class GroceryListFragment extends Fragment {
 
     /**
      * Creates layout for the grocery list view
+     *
      * @param context the context
      */
     public void createGroceryListListView(final Context context) {
@@ -52,8 +56,8 @@ public class GroceryListFragment extends Fragment {
                 context,
                 R.layout.grocery_list_row,
                 cursor,
-                new String[] {DatabaseHelper.NAME},
-                new int[] {R.id.nameTextView},
+                new String[]{DatabaseHelper.NAME},
+                new int[]{R.id.nameTextView},
                 0) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -100,5 +104,11 @@ public class GroceryListFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         databaseHelper = new DatabaseHelper(context);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        // menuInflater.inflate(R.menu.grocery_list_menu, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
     }
 }

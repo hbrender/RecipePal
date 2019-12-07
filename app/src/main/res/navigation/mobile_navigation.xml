@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_recipes"
-        android:name="com.example.recipepal.ui.recipe.RecipeFragment"
+        android:name="com.example.recipepal.fragments.RecipeListFragment"
         android:label="@string/title_recipes"
-        tools:layout="@layout/fragment_recipes" />
+        tools:layout="@layout/fragment_recipe_list" />
 
     <fragment
         android:id="@+id/navigation_grocery_list"
-        android:name="com.example.recipepal.ui.grocerylist.GroceryListFragment"
+        android:name="com.example.recipepal.fragments.GroceryListFragment"
         android:label="@string/title_grocery_list"
         tools:layout="@layout/fragment_grocerylist" />
 </navigation>

@@ -3,7 +3,7 @@
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
-tools:context=".RecipeInfoActivity"
+tools:context=".activities.RecipeInfoActivity"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:divider="?android:dividerHorizontal">
@@ -15,14 +15,14 @@ android:divider="?android:dividerHorizontal">
     android:columnCount="2"
     android:padding="10dp">
 
-    <TextView
+    <EditText
         android:id="@+id/recipeNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recipe Name"
+        android:hint="Recipe Name"
         android:layout_columnSpan="2"
         android:layout_gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/edit_text_color"
         android:textSize="24sp" />
 
     <Button
@@ -34,24 +34,29 @@ android:divider="?android:dividerHorizontal">
         android:background="@drawable/rounded_button"
         android:text="Start Recipe"
         android:layout_columnSpan="2"
+        android:enabled="false"
         android:onClick="startRecipeButtonOnClick"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
 
-    <TextView
+    <EditText
         android:id="@+id/totalTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_columnSpan="1"
+        android:textColor="@color/edit_text_color"
+        android:hint="@string/total_time"
         android:layout_marginLeft="70dp"
         android:drawableLeft="@drawable/ic_access_time_24dp"
         android:textSize="15dp" />
 
-    <TextView
+    <EditText
         android:id="@+id/servingsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_columnSpan="1"
+        android:textColor="@color/edit_text_color"
+        android:hint="@string/total_servings"
         android:layout_marginLeft="70dp"
         android:drawableLeft="@drawable/ic_pie_chart_outlined_24dp"
         android:textSize="15dp"/>
@@ -68,7 +73,7 @@ android:divider="?android:dividerHorizontal">
         android:text="@string/ingredients" />
 
     <Button
-        android:id="@+id/addToGroceryListButton"
+        android:id="@+id/addIngredientsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14dp"
@@ -78,8 +83,7 @@ android:divider="?android:dividerHorizontal">
         android:onClick="addIngredientButtonOnClick"
         android:background="@null"
         android:textColor="@color/colorPrimaryDark"
-        android:drawableRight="@drawable/ic_add_24dp"
-        android:text="@string/title_grocery_list" />
+        android:drawableRight="@drawable/ic_add_24dp" />
 
     <ListView
         android:id="@+id/ingredientsListView"
@@ -94,9 +98,22 @@ android:divider="?android:dividerHorizontal">
         android:id="@+id/instructionsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_columnSpan="2"
+        android:layout_columnSpan="1"
         android:textSize="16dp"
         android:text="@string/instructions" />
+
+    <Button
+        android:id="@+id/addInstructionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:layout_columnSpan="1"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center|end"
+        android:onClick="addIntructionButtonOnClick"
+        android:background="@null"
+        android:textColor="@color/colorPrimaryDark"
+        android:drawableRight="@drawable/ic_add_24dp" />
 
     <ListView
         android:id="@+id/instructionsListView"

@@ -1,46 +1,56 @@
-package com.example.recipepal;
+package com.example.recipepal.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.recipepal.R;
 import com.example.recipepal.helpers.DatabaseHelper;
+import com.example.recipepal.helpers.UIUtils;
 import com.google.android.material.snackbar.Snackbar;
 
 //https://www.youtube.com/watch?v=plQIpqBcdQE (referenced for custom circular button)
 //https://stackoverflow.com/questions/6210895/listview-inside-scrollview-is-not-scrolling-on-android/6211286#6211286 (referenced for listview touch listener)
+//https://stackoverflow.com/questions/6912237/how-to-return-to-default-style-on-edittext-if-i-apply-a-background (referenced for making edittext look like textview)
+//https://stackoverflow.com/questions/16337063/how-to-change-the-default-disabled-edittexts-style (referenced for setting edittext disabled colors)
 
 public class RecipeInfoActivity extends AppCompatActivity {
     static final String TAG = "RecipeActivityTag";
     DatabaseHelper databaseHelper;
     int recipeId;
 
-    TextView recipeNameTextView;
-    TextView totalTimeTextView;
-    TextView servingsTextView;
+    EditText recipeNameTextView;
+    EditText totalTimeTextView;
+    EditText servingsTextView;
     ListView ingredientsListView;
     ListView instructionListView;
     Button addIngredientsButton;
+    Button addInstructionsButton;
+    Button startRecipeButton;
     MenuItem editMenuItem;
     MenuItem saveMenuItem;
     SimpleCursorAdapter ingredientsAdapter;
     SimpleCursorAdapter instructionsAdapter;
+    Drawable recipeNameOriginalDrawable;
+    Drawable totalTimeOriginalDrawable;
+    Drawable servingsOriginalDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +67,14 @@ public class RecipeInfoActivity extends AppCompatActivity {
         servingsTextView = findViewById(R.id.servingsTextView);
         ingredientsListView = findViewById(R.id.ingredientsListView);
         instructionListView = findViewById(R.id.instructionsListView);
-        addIngredientsButton = findViewById(R.id.addToGroceryListButton);
+        addIngredientsButton = findViewById(R.id.addIngredientsButton);
+        addInstructionsButton = findViewById(R.id.addInstructionButton);
+        startRecipeButton = findViewById(R.id.startRecipeButton);
+
+        // get original background of edit texts
+        recipeNameOriginalDrawable = recipeNameTextView.getBackground();
+        totalTimeOriginalDrawable = totalTimeTextView.getBackground();
+        servingsOriginalDrawable = servingsTextView.getBackground();
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -65,6 +82,9 @@ public class RecipeInfoActivity extends AppCompatActivity {
 
             if (recipeId != -1) {
                 setRecipeInfo();
+                disableEditing();
+            } else {
+
             }
         }
     }
@@ -153,6 +173,36 @@ public class RecipeInfoActivity extends AppCompatActivity {
         UIUtils.setListViewHeightBasedOnItems(instructionListView, this);
     }
 
+    public void disableEditing() {
+        recipeNameTextView.setEnabled(false);
+        totalTimeTextView.setEnabled(false);
+        servingsTextView.setEnabled(false);
+
+        // set background to look like text view
+        recipeNameTextView.setBackgroundResource(android.R.color.transparent);
+        totalTimeTextView.setBackgroundResource(android.R.color.transparent);
+        servingsTextView.setBackgroundResource(android.R.color.transparent);
+
+        addIngredientsButton.setText(getString(R.string.title_grocery_list));
+        addInstructionsButton.setVisibility(View.INVISIBLE);
+        startRecipeButton.setEnabled(true);
+    }
+
+    public void enableEditing() {
+        recipeNameTextView.setEnabled(true);
+        totalTimeTextView.setEnabled(true);
+        servingsTextView.setEnabled(true);
+
+        // set background to look like edit text
+        recipeNameTextView.setBackground(recipeNameOriginalDrawable);
+        totalTimeTextView.setBackground(totalTimeOriginalDrawable);
+        servingsTextView.setBackground(servingsOriginalDrawable);
+
+        addIngredientsButton.setText("");
+        addInstructionsButton.setVisibility(View.VISIBLE);
+        startRecipeButton.setEnabled(false);
+    }
+
     public void startRecipeButtonOnClick(View view) {
         Toast.makeText(this, "TODO: start recipe", Toast.LENGTH_SHORT).show();
     }
@@ -173,6 +223,10 @@ public class RecipeInfoActivity extends AppCompatActivity {
         }
     }
 
+    public void addIntructionButtonOnClick(View view) {
+
+    }
+
     public void addInstructionButtonOnClick(View view) {
         Toast.makeText(this, "TODO: add instruction", Toast.LENGTH_SHORT).show();
     }
@@ -186,12 +240,13 @@ public class RecipeInfoActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.editMenuItem:
-                // enable editing
+                enableEditing();
                 editMenuItem.setVisible(false);
                 saveMenuItem.setVisible(true);
                 return true;
             case R.id.saveMenuItem:
                 // check if recipe info can be saved with no errors
+                disableEditing();
                 editMenuItem.setVisible(true);
                 saveMenuItem.setVisible(false);
                 return true;
@@ -209,6 +264,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
         editMenuItem = menu.findItem(R.id.editMenuItem);
         saveMenuItem = menu.findItem(R.id.saveMenuItem);
 
+        Log.d(TAG, "onCreateOptionsMenu: " + recipeId);
         if (recipeId == -1) {
             editMenuItem.setVisible(false);
             saveMenuItem.setVisible(true);

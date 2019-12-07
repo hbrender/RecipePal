@@ -1,14 +1,13 @@
-package com.example.recipepal;
+package com.example.recipepal.helpers;
 
-import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.recipepal.R;
+import com.example.recipepal.activities.RecipeInfoActivity;
 
 // from: https://stackoverflow.com/questions/1778485/android-listview-display-all-available-items-without-scroll-with-static-header/1958482
 

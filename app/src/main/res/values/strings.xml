@@ -8,7 +8,9 @@
     <string name="add_ingredient">Add Ingredient</string>
     <string name="add_instruction">Add Instruction</string>
     <string name="ingredients_added">Ingredients have been added to Grocery List.</string>
-    <string name="label_save">Save</string>
-    <string name="label_edit">Edit</string>
-
+    <string name="save_recipe">Save Recipe</string>
+    <string name="edit_recipe">Edit Recipe</string>
+    <string name="add_recipe">Add Recipe</string>
+    <string name="total_time">\u0020total time</string>
+    <string name="total_servings">\u0020total servings</string>
 </resources>

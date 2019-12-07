@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/editMenuItem"
-        android:title="@string/label_edit"
+        android:title="@string/edit_recipe"
         android:icon="@drawable/ic_edit_30dp"
         app:showAsAction="ifRoom"
-        android:tooltipText="@string/label_edit"/>
+        android:tooltipText="@string/edit_recipe"/>
     <item
         android:id="@+id/saveMenuItem"
-        android:title="@string/label_save"
+        android:title="@string/save_recipe"
         android:icon="@drawable/ic_save_30dp"
         app:showAsAction="ifRoom"
         android:visible="false"
-        android:tooltipText="@string/label_save" />
+        android:tooltipText="@string/save_recipe" />
 </menu>

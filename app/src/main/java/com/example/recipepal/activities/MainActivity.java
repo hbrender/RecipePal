@@ -1,7 +1,8 @@
-package com.example.recipepal;
+package com.example.recipepal.activities;
 
 import android.os.Bundle;
 
+import com.example.recipepal.R;
 import com.example.recipepal.helpers.DatabaseHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
