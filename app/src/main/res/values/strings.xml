@@ -13,4 +13,8 @@
     <string name="add_recipe">Add Recipe</string>
     <string name="total_time">\u0020total time</string>
     <string name="total_servings">\u0020total servings</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="delete_recipe_message">Are you sure you want to delete the selected recipe(s)?</string>
+    <string name="delete_recipe">Delete Recipe</string>
 </resources>

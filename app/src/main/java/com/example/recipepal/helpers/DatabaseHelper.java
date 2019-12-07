@@ -280,4 +280,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(sqlInsert);
         db.close();
     }
+
+    /**
+     * Delete a recipe and its ingredients and instructions
+     * @param recipeId the id matching the recipe to delete
+     */
+    public void deleteRecipeById(int recipeId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_RECIPE_INGREDIENTS, RECIPE_ID + " = ?", new String[] { String.valueOf(recipeId)});
+        db.delete(TABLE_INSTRUCTIONS, RECIPE_ID + " = ?", new String[] { String.valueOf(recipeId)});
+        db.delete(TABLE_RECIPE, ID + " = ?", new String[] { String.valueOf(recipeId)});
+
+        db.close();
+    }
 }

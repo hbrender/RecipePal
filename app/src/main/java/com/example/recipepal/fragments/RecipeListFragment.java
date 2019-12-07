@@ -139,21 +139,21 @@ public class RecipeListFragment extends Fragment {
                     case R.id.deleteMenuItem:
                         final long[] checkIds = recipeListView.getCheckedItemIds();
 
-                        /*AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
-                        alertBuilder.setTitle(getString(R.string.delete_patient))
-                                .setMessage(getString(R.string.message_delete_patients))
+                        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+                        alertBuilder.setTitle(getString(R.string.delete_recipe))
+                                .setMessage(getString(R.string.delete_recipe_message))
                                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        // delete all selected patients
+                                        // delete all selected recipes
                                         for (long id: checkIds) {
-                                            databaseHelper.deletePatientById((int) id);
-                                            updatePatientListView();
+                                            databaseHelper.deleteRecipeById((int) id);
+                                            createRecipeListView(getContext()); // update list view
                                         }
                                     }
                                 })
                                 .setNegativeButton(R.string.no, null);
-                        alertBuilder.show();*/
+                        alertBuilder.show();
 
                         mode.finish(); // exit cam
                         return true;
