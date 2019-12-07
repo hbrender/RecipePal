@@ -2,15 +2,18 @@ package com.example.recipepal.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.recipepal.R;
@@ -107,6 +111,60 @@ public class RecipeListFragment extends Fragment {
             }
         };
         recipeListView.setAdapter(simpleCursorAdapter);
+
+        // set the listener for entering CAM, user long presses they can select multiple recipes
+        recipeListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        recipeListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                int numChecked = recipeListView.getCheckedItemCount();
+                mode.setTitle(numChecked + " selected");
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater menuInflater = getActivity().getMenuInflater();
+                menuInflater.inflate(R.menu.cam_menu, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.deleteMenuItem:
+                        final long[] checkIds = recipeListView.getCheckedItemIds();
+
+                        /*AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+                        alertBuilder.setTitle(getString(R.string.delete_patient))
+                                .setMessage(getString(R.string.message_delete_patients))
+                                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // delete all selected patients
+                                        for (long id: checkIds) {
+                                            databaseHelper.deletePatientById((int) id);
+                                            updatePatientListView();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, null);
+                        alertBuilder.show();*/
+
+                        mode.finish(); // exit cam
+                        return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+            }
+        });
 
         RecipeItemClickListener listener = new RecipeItemClickListener();
         recipeListView.setOnItemClickListener(listener);
