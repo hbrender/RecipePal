@@ -217,14 +217,24 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     public void setRecipeInfo() {
         final Cursor cursor = databaseHelper.getRecipeByIdCursor(recipeId);
         if (cursor.getColumnCount() > 0 && cursor.moveToPosition(0)) {
-            recipeNameTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-
-            if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)) != null) {
-                totalTimeTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)));
+            if(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)).length() != 0) {
+                recipeNameTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+            } else {
+                recipeNameTextView.setText(null);
             }
 
-            if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)) != null) {
+            if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)) != null &&
+                    cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)).length() != 0) {
+                totalTimeTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)));
+            } else {
+                totalTimeTextView.setText(null);
+            }
+
+            if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)) != null&&
+                    cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)).length() != 0) {
                 servingsTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)));
+            } else {
+                servingsTextView.setText(null);
             }
         }
 
@@ -359,6 +369,14 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         setMultiChoiceModeListeners();
     }
 
+    public void saveRecipeInfo() {
+        String name = recipeNameTextView.getText().toString();
+        String time = totalTimeTextView.getText().toString();
+        String servings = servingsTextView.getText().toString();
+
+        databaseHelper.updateRecipe(recipeId, name, time, servings);
+    }
+
     public void startRecipeButtonOnClick(View view) {
         Toast.makeText(this, "TODO: start recipe", Toast.LENGTH_SHORT).show();
     }
@@ -402,6 +420,7 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
                 return true;
             case R.id.saveMenuItem:
                 // check if recipe info can be saved with no errors
+                saveRecipeInfo();
                 disableEditing();
                 editMenuItem.setVisible(true);
                 saveMenuItem.setVisible(false);

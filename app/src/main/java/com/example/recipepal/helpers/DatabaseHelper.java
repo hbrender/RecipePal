@@ -110,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_GROCERY_LIST + " VALUES(3, 0, 3)");
         db.execSQL("INSERT INTO " + TABLE_GROCERY_LIST + " VALUES(4, 1, 4)");
 
-        db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(1, 'The World''s Easiest Cookies', null, '30 min', '16 cookies', 1)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(1, 'The Worlds Easiest Cookies', null, '30 min', '16 cookies', 1)");
         db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(2, 'White Pizza with Pesto Parsely Drizzle', null, '40 min', '8 slices', 0)");
 
         db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(1, 1, 1, "
@@ -265,6 +265,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + favorited + " WHERE " + ID + " = " + groceryId;
 
         Log.d(TAG, "updateGroceryItemChecked: " + sqlUpdate);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sqlUpdate);
+        db.close();
+    }
+
+    /**
+     * Update a recipe's information
+     * @param recipeId
+     */
+    public void updateRecipe(int recipeId, String name, String time, String servings) {
+        String sqlUpdate = "UPDATE " + TABLE_RECIPE + " SET "
+                + NAME + " = '" + name + "', "
+                + TIME + " = '" + time + "', "
+                + SERVINGS + " = '" + servings
+                + "' WHERE " + ID + " = " + recipeId;
+
+        Log.d(TAG, "updateRecipe: " + sqlUpdate);
 
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(sqlUpdate);
