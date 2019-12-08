@@ -42,7 +42,7 @@ import com.google.android.material.snackbar.Snackbar;
 //https://stackoverflow.com/questions/6912237/how-to-return-to-default-style-on-edittext-if-i-apply-a-background (referenced for making edittext look like textview)
 //https://stackoverflow.com/questions/16337063/how-to-change-the-default-disabled-edittexts-style (referenced for setting edittext disabled colors)
 
-public class RecipeInfoActivity extends AppCompatActivity implements AddIngredientDialog.AddIngredientDialogListener {
+public class RecipeInfoActivity extends AppCompatActivity implements AddIngredientDialog.AddIngredientDialogListener, AddInstructionDialog.AddInstructionDialogListener {
     static final String TAG = "RecipeActivityTag";
     DatabaseHelper databaseHelper;
     int recipeId;
@@ -423,5 +423,11 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
             databaseHelper.insertRecipeIngredientItem(recipeId, (int) ingredientId);
             setIngredientsListView();
         }
+    }
+
+    @Override
+    public void applyTexts(String step, String content, String timer) {
+        databaseHelper.insertInstructionItem(recipeId, step, content, timer, -1);
+        setInstructionListView();
     }
 }

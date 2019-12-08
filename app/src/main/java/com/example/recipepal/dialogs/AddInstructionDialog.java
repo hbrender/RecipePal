@@ -20,6 +20,7 @@ import com.example.recipepal.R;
 public class AddInstructionDialog extends AppCompatDialogFragment {
     private EditText stepNumEditView;
     private EditText contentEditText;
+    private EditText timerEditText;
     private AddInstructionDialogListener listener;
 
     @NonNull
@@ -31,6 +32,7 @@ public class AddInstructionDialog extends AppCompatDialogFragment {
 
         stepNumEditView = view.findViewById(R.id.stepNumEditView);
         contentEditText = view.findViewById(R.id.contentEditText);
+        timerEditText = view.findViewById(R.id.timerEditText);
 
         builder.setView(view)
                 .setTitle(getString(R.string.add_instruction))
@@ -38,9 +40,10 @@ public class AddInstructionDialog extends AppCompatDialogFragment {
                 .setPositiveButton(getString(R.string.add), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //String amount = amountEditText.getText().toString();
-                        //String name = nameEditText.getText().toString();
-                        //listener.applyTexts(amount, name);
+                        String step = stepNumEditView.getText().toString();
+                        String content = contentEditText.getText().toString();
+                        String timer = timerEditText.getText().toString();
+                        listener.applyTexts(step, content, timer);
                     }
                 });
 
@@ -51,14 +54,14 @@ public class AddInstructionDialog extends AppCompatDialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        //try {
-        //    listener = (AddInstructionDialogListener) context;
-        //} catch (ClassCastException e) {
-        //    throw new ClassCastException(context.toString() + "must implement AddInstructionDialogListener");
-        //}
+        try {
+            listener = (AddInstructionDialogListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + "must implement AddInstructionDialogListener");
+        }
     }
 
     public interface AddInstructionDialogListener {
-        void applyTexts(String amount, String name);
+        void applyTexts(String step, String content, String timer);
     }
 }

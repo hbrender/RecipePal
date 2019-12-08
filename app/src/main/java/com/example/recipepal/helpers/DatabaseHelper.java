@@ -55,13 +55,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Instruction table create statement
     private static final String CREATE_TABLE_INSTRUCTIONS = "CREATE TABLE " + TABLE_INSTRUCTIONS + "("
-            + ID + " INTEGER, "
+            + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + RECIPE_ID  + " INTEGER, "
             + STEP_NUM + " INTEGER, "
             + CONTENT + " TEXT, "
             + TIME + " TIME, "
             + IMAGE_RESOURCE + " INTEGER, "
-            + "PRIMARY KEY(" + ID + ", " + RECIPE_ID + ", " + STEP_NUM + "), "
             + "FOREIGN KEY(" + RECIPE_ID + ") REFERENCES " + TABLE_RECIPE + "(" + ID + "))";
 
     // Ingredient table create statement
@@ -300,6 +299,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + recipeId + ", " + ingredientId + ")";
 
         Log.d(TAG, "insertRecipeIngredientItem: " + sqlInsert);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sqlInsert);
+        db.close();
+    }
+
+    public void insertInstructionItem(int recipeId, String step, String content, String time, int imageResource) {
+        String sqlInsert = "INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(null, "
+                + recipeId + ", '" + step + "', '" + content + "', '" + time + "', " + imageResource + ")";
+
+        Log.d(TAG, "insertInstructionItem: " + sqlInsert);
 
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(sqlInsert);
