@@ -230,7 +230,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllRecipeInstructionsByIdCursor(int recipeId) {
         String sqlSelect = "SELECT i.* FROM " + TABLE_INSTRUCTIONS + " i, " + TABLE_RECIPE + " r"
                 + " WHERE i." + RECIPE_ID + " = r." + ID
-                + " AND r." + ID + " = '" + recipeId + "'";
+                + " AND r." + ID + " = '" + recipeId + "'"
+                + " ORDER BY " + STEP_NUM + "";
 
         Log.d(TAG, "getAllRecipeInstructionsByIdCursor: " + sqlSelect);
         SQLiteDatabase db = getReadableDatabase();
