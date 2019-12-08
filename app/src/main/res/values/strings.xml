@@ -17,4 +17,8 @@
     <string name="yes">Yes</string>
     <string name="delete_recipe_message">Are you sure you want to delete the selected recipe(s)?</string>
     <string name="delete_recipe">Delete Recipe</string>
+    <string name="delete_ingredient_message">Are you sure you want to delete the selected ingredients(s)?</string>
+    <string name="delete_ingredient">Delete Ingredient</string>
+    <string name="delete_instruction_message">Are you sure you want to delete the selected instructions(s)?</string>
+    <string name="delete_instruction">Delete Instructions</string>
 </resources>

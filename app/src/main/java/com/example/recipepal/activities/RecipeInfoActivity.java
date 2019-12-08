@@ -128,15 +128,15 @@ public class RecipeInfoActivity extends AppCompatActivity {
                         final long[] checkIds = ingredientsListView.getCheckedItemIds();
 
                         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(RecipeInfoActivity.this);
-                        alertBuilder.setTitle(getString(R.string.delete_recipe))
-                                .setMessage(getString(R.string.delete_recipe_message))
+                        alertBuilder.setTitle(getString(R.string.delete_ingredient))
+                                .setMessage(getString(R.string.delete_ingredient_message))
                                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         // delete all selected recipes
                                         for (long id: checkIds) {
-                                            //databaseHelper.deleteRecipeById((int) id);
-                                            //createRecipeListView(getContext()); // update list view
+                                            databaseHelper.deleteIngredientById((int) id);
+                                            setIngredientsListView(); // update list view
                                         }
                                     }
                                 })
@@ -181,15 +181,15 @@ public class RecipeInfoActivity extends AppCompatActivity {
                         final long[] checkIds = instructionListView.getCheckedItemIds();
 
                         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(RecipeInfoActivity.this);
-                        alertBuilder.setTitle(getString(R.string.delete_recipe))
-                                .setMessage(getString(R.string.delete_recipe_message))
+                        alertBuilder.setTitle(getString(R.string.delete_instruction))
+                                .setMessage(getString(R.string.delete_instruction_message))
                                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         // delete all selected recipes
                                         for (long id: checkIds) {
-                                            //databaseHelper.deleteRecipeById((int) id);
-                                            //createRecipeListView(getContext()); // update list view
+                                            databaseHelper.deleteInstructionById((int) id);
+                                            setInstructionListView(); // update list view
                                         }
                                     }
                                 })
@@ -216,30 +216,8 @@ public class RecipeInfoActivity extends AppCompatActivity {
             servingsTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)));
         }
 
-        final Cursor cursor2 = databaseHelper.getAllRecipeIngredientsByIdCursor(recipeId);
-        ingredientsAdapter = new SimpleCursorAdapter(
-                this,
-                R.layout.ingredient_list_row,
-                cursor2,
-                new String[] {DatabaseHelper.NAME},
-                new int[] {R.id.nameTextView},
-                0) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-
-                TextView amountTextView = view.findViewById(R.id.amountTextView);
-                TextView nameTextView = view.findViewById(R.id.nameTextView);
-
-                if (cursor2.moveToPosition(position)) {
-                    amountTextView.setText(cursor2.getString(cursor2.getColumnIndex(DatabaseHelper.AMOUNT)));
-                    nameTextView.setText(cursor2.getString(cursor2.getColumnIndex(DatabaseHelper.NAME)));
-                }
-
-                return view;
-            }
-        };
-        ingredientsListView.setAdapter(ingredientsAdapter);
+        setIngredientsListView();
+        setInstructionListView();
 
         /*ingredientsListView.setOnTouchListener(new ListView.OnTouchListener() {
             @Override
@@ -262,12 +240,43 @@ public class RecipeInfoActivity extends AppCompatActivity {
                 return true;
             }
         });*/
+    }
 
-        final Cursor cursor3 = databaseHelper.getAllRecipeInstructionsByIdCursor(recipeId);
+    public void setIngredientsListView() {
+        final Cursor cursor = databaseHelper.getAllRecipeIngredientsByIdCursor(recipeId);
+        ingredientsAdapter = new SimpleCursorAdapter(
+                this,
+                R.layout.ingredient_list_row,
+                cursor,
+                new String[] {DatabaseHelper.NAME},
+                new int[] {R.id.nameTextView},
+                0) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+
+                TextView amountTextView = view.findViewById(R.id.amountTextView);
+                TextView nameTextView = view.findViewById(R.id.nameTextView);
+
+                if (cursor.moveToPosition(position)) {
+                    amountTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.AMOUNT)));
+                    nameTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+                }
+
+                return view;
+            }
+        };
+        ingredientsListView.setAdapter(ingredientsAdapter);
+        UIUtils.setListViewHeightBasedOnItems(ingredientsListView, this);
+
+    }
+
+    public void setInstructionListView() {
+        final Cursor cursor = databaseHelper.getAllRecipeInstructionsByIdCursor(recipeId);
         instructionsAdapter = new SimpleCursorAdapter(
                 this,
                 R.layout.instruction_list_row,
-                cursor3,
+                cursor,
                 new String[] {DatabaseHelper.CONTENT},
                 new int[] {R.id.instructionContextTextView},
                 0) {
@@ -278,9 +287,9 @@ public class RecipeInfoActivity extends AppCompatActivity {
                 TextView stepTextView = view.findViewById(R.id.stepTextView);
                 TextView instructionContextTextView = view.findViewById(R.id.instructionContextTextView);
 
-                if (cursor3.moveToPosition(position)) {
-                    stepTextView.setText(cursor3.getInt(cursor3.getColumnIndex(DatabaseHelper.STEP_NUM)) + ".");
-                    instructionContextTextView.setText(cursor3.getString(cursor3.getColumnIndex(DatabaseHelper.CONTENT)));
+                if (cursor.moveToPosition(position)) {
+                    stepTextView.setText(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STEP_NUM)) + ".");
+                    instructionContextTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.CONTENT)));
                 }
 
                 return view;
@@ -288,7 +297,6 @@ public class RecipeInfoActivity extends AppCompatActivity {
         };
         instructionListView.setAdapter(instructionsAdapter);
 
-        UIUtils.setListViewHeightBasedOnItems(ingredientsListView, this);
         UIUtils.setListViewHeightBasedOnItems(instructionListView, this);
     }
 
@@ -305,6 +313,12 @@ public class RecipeInfoActivity extends AppCompatActivity {
         addIngredientsButton.setText(getString(R.string.title_grocery_list));
         addInstructionsButton.setVisibility(View.INVISIBLE);
         startRecipeButton.setEnabled(true);
+
+        // no CAM for list view when recipe is not in edit mode
+        ingredientsListView.clearChoices();
+        ingredientsListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+        instructionListView.clearChoices();
+        instructionListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
     }
 
     public void enableEditing() {
@@ -320,6 +334,9 @@ public class RecipeInfoActivity extends AppCompatActivity {
         addIngredientsButton.setText("");
         addInstructionsButton.setVisibility(View.VISIBLE);
         startRecipeButton.setEnabled(false);
+
+        // CAM for list views
+        setMultiChoiceModeListeners();
     }
 
     public void startRecipeButtonOnClick(View view) {

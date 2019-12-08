@@ -294,4 +294,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.close();
     }
+
+    /**
+     * Delete a recipe's ingredient
+     * @param recipeIngredientId the id matching the recipe ingredient to delete
+     */
+    public void deleteIngredientById(int recipeIngredientId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //db.delete(TABLE_RECIPE_INGREDIENTS, ID + " = ?", new String[] { String.valueOf(recipeIngredientId)});
+
+        String sqlDelete = "DELETE FROM " + TABLE_RECIPE_INGREDIENTS
+                + " WHERE " + INGREDIENT_ID + " = " + recipeIngredientId;
+
+        Log.d(TAG, "deleteIngredientById: " + sqlDelete);
+
+        db.execSQL(sqlDelete);
+        db.close();
+    }
+
+    /**
+     * Delete a recipe's instruction
+     * @param instructionId the id matching the recipe instruction to delete
+     */
+    public void deleteInstructionById(int instructionId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //db.delete(TABLE_INSTRUCTIONS, ID + " = ?", new String[] { String.valueOf(instructionId)});
+
+        String sqlDelete = "DELETE FROM " + TABLE_INSTRUCTIONS
+                + " WHERE " + ID + " = " + instructionId;
+
+        Log.d(TAG, "deleteInstructionById: " + sqlDelete);
+
+        db.execSQL(sqlDelete);
+        db.close();
+    }
 }
