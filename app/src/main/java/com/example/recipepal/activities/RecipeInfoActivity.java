@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -217,8 +218,14 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         final Cursor cursor = databaseHelper.getRecipeByIdCursor(recipeId);
         if (cursor.getColumnCount() > 0 && cursor.moveToPosition(0)) {
             recipeNameTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-            totalTimeTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)));
-            servingsTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)));
+
+            if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)) != null) {
+                totalTimeTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)));
+            }
+
+            if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)) != null) {
+                servingsTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)));
+            }
         }
 
         setIngredientsListView();
@@ -249,6 +256,12 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
 
     public void setIngredientsListView() {
         final Cursor cursor = databaseHelper.getAllRecipeIngredientsByIdCursor(recipeId);
+
+        // hide add grocery button if no ingredients
+        if (cursor.getCount() == 0) {
+            addIngredientsButton.setVisibility(View.INVISIBLE);
+        }
+
         ingredientsAdapter = new SimpleCursorAdapter(
                 this,
                 R.layout.ingredient_list_row,
@@ -338,6 +351,7 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         servingsTextView.setBackground(servingsOriginalDrawable);
 
         addIngredientsButton.setText("");
+        addIngredientsButton.setVisibility(View.VISIBLE);
         addInstructionsButton.setVisibility(View.VISIBLE);
         startRecipeButton.setEnabled(false);
 

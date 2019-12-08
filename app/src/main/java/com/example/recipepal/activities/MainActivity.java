@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.recipepal.R;
+import com.example.recipepal.dialogs.AddRecipeDialog;
 import com.example.recipepal.fragments.GroceryListFragment;
 import com.example.recipepal.fragments.RecipeListFragment;
 import com.example.recipepal.helpers.DatabaseHelper;
@@ -32,11 +33,12 @@ import java.util.List;
 //<div>Icons made by <a href="https://www.flaticon.com/authors/nikita-golubev" title="Nikita Golubev">Nikita Golubev</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 
 //https://stackoverflow.com/questions/47714606/viewpager-using-bottom-navigation-view-is-not-swiping-the-fragments (referenced for viewpager with bottom navigation)
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AddRecipeDialog.AddRecipeDialogListener {
     DatabaseHelper databaseHelper = new DatabaseHelper(this);
     MenuItem prevMenuItem;
     BottomNavigationView bottomNavigationView;
     ViewPager viewPager;
+    RecipeListFragment recipeListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new RecipeListFragment());
+        recipeListFragment = new RecipeListFragment();
+        viewPagerAdapter.addFragment(recipeListFragment);
         viewPagerAdapter.addFragment(new GroceryListFragment());
         viewPager.setAdapter(viewPagerAdapter);
     }
@@ -121,5 +124,10 @@ public class MainActivity extends AppCompatActivity {
         public void addFragment(Fragment fragment) {
             mFragmentList.add(fragment);
         }
+    }
+
+    @Override
+    public void applyTexts(String name) {
+        recipeListFragment.applyTexts(name);
     }
 }

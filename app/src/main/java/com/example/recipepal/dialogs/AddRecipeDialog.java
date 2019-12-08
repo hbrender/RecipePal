@@ -16,33 +16,38 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.recipepal.R;
+import com.example.recipepal.fragments.RecipeListFragment;
 
 // tutorial referenced: https://www.youtube.com/watch?v=ARezg1D9Zd0
 
-public class AddIngredientDialog extends AppCompatDialogFragment {
-    private EditText amountEditText;
-    private EditText nameEditText;
-    private AddIngredientDialogListener listener;
+public class AddRecipeDialog extends AppCompatDialogFragment {
+    private EditText recipeNameEditText;
+    private AddRecipeDialogListener listener;
+    RecipeListFragment recipeListFragment;
+
+    public AddRecipeDialog(RecipeListFragment recipeListFragment) {
+        this.recipeListFragment = recipeListFragment;
+    }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_add_ingredient, null);
+        View view = inflater.inflate(R.layout.dialog_add_recipe, null);
 
-        amountEditText = view.findViewById(R.id.amountEditText);
-        nameEditText = view.findViewById(R.id.nameEditText);
+        recipeNameEditText = view.findViewById(R.id.recipeNameEditText);
 
         builder.setView(view)
-                .setTitle(getString(R.string.add_ingredient))
+                .setTitle(getString(R.string.add_recipe))
                 .setNegativeButton(getString(R.string.cancel), null)
                 .setPositiveButton(getString(R.string.add), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String amount = amountEditText.getText().toString();
-                        String name = nameEditText.getText().toString();
-                        listener.applyTexts(amount, name);
+                        String name = recipeNameEditText.getText().toString();
+                        listener.applyTexts(name);
+
+                        recipeListFragment.startRecipeInfoActivity(recipeListFragment.getRecipeId());
                     }
                 });
 
@@ -54,13 +59,13 @@ public class AddIngredientDialog extends AppCompatDialogFragment {
         super.onAttach(context);
 
         try {
-            listener = (AddIngredientDialogListener) context;
+            listener = (AddRecipeDialogListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + "must implement AddIngredientListener");
+            throw new ClassCastException(context.toString() + "must implement AddRecipeDialogListener");
         }
     }
 
-    public interface AddIngredientDialogListener {
-        void applyTexts(String amount, String name);
+    public interface AddRecipeDialogListener {
+        void applyTexts(String name);
     }
 }

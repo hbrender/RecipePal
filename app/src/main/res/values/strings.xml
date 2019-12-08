@@ -26,4 +26,5 @@
     <string name="step">step #</string>
     <string name="content">content</string>
     <string name="add_photo">Add Photo</string>
+    <string name="name">name</string>
 </resources>

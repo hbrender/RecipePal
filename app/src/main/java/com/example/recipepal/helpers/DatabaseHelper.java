@@ -271,6 +271,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Insert ingredient into the grocery list
+     * @param ingredientId
+     */
     public void insertGroceryListItem(int ingredientId) {
         String sqlInsert = "INSERT INTO " + TABLE_GROCERY_LIST + " VALUES(null, 0, "
                 + ingredientId + ")";
@@ -282,6 +286,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Insert an ingredient item
+     * @param amount
+     * @param name
+     * @return
+     */
     public long insertIngredientItem(String amount, String name) {
         ContentValues values = new ContentValues();
         values.put(AMOUNT, amount);
@@ -294,6 +304,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    /**
+     * Insert an recipe item
+     * @param name
+     * @return
+     */
+    public long insertRecipeItem(String name) {
+        ContentValues values = new ContentValues();
+        values.put(NAME, name);
+
+        SQLiteDatabase db = getWritableDatabase();
+        long result = db.insert(TABLE_RECIPE, null, values);
+        db.close();
+
+        return result;
+    }
+
+    /**
+     * Insert a recipe ingredient item
+     * @param recipeId
+     * @param ingredientId
+     */
     public void insertRecipeIngredientItem(int recipeId, int ingredientId) {
         String sqlInsert = "INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(null, "
                 + recipeId + ", " + ingredientId + ")";
@@ -305,6 +336,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * insert a instruction item
+     * @param recipeId
+     * @param step
+     * @param content
+     * @param time
+     * @param imageResource
+     */
     public void insertInstructionItem(int recipeId, String step, String content, String time, int imageResource) {
         String sqlInsert = "INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(null, "
                 + recipeId + ", '" + step + "', '" + content + "', '" + time + "', " + imageResource + ")";

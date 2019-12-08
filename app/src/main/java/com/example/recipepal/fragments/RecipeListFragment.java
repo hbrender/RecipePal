@@ -27,6 +27,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.recipepal.R;
 import com.example.recipepal.activities.RecipeInfoActivity;
+import com.example.recipepal.dialogs.AddInstructionDialog;
+import com.example.recipepal.dialogs.AddRecipeDialog;
 import com.example.recipepal.helpers.DatabaseHelper;
 import com.example.recipepal.models.Recipe;
 
@@ -41,6 +43,7 @@ public class RecipeListFragment extends Fragment {
     DatabaseHelper databaseHelper;
     SimpleCursorAdapter simpleCursorAdapter;
     ListView recipeListView;
+    int recipeId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -178,12 +181,16 @@ public class RecipeListFragment extends Fragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Cursor cursor = (Cursor) parent.getItemAtPosition(position);
 
-            int recipeId = cursor.getInt(0);
+            recipeId = cursor.getInt(0);
 
-            Intent intent = new Intent(getActivity(), RecipeInfoActivity.class);
-            intent.putExtra("recipeId", recipeId);
-            startActivity(intent);
+            startRecipeInfoActivity(recipeId);
         }
+    }
+
+    public void startRecipeInfoActivity(int recipeId) {
+        Intent intent = new Intent(getActivity(), RecipeInfoActivity.class);
+        intent.putExtra("recipeId", recipeId);
+        startActivity(intent);
     }
 
     @Override
@@ -198,12 +205,18 @@ public class RecipeListFragment extends Fragment {
 
         switch (id) {
             case R.id.addRecipeMenuItem:
-                Intent intent = new Intent(getActivity(), RecipeInfoActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
+                AddRecipeDialog dialog = new AddRecipeDialog(this);
+                dialog.show(getActivity().getSupportFragmentManager(), "Add recipe");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void applyTexts(String name) {
+        long newId = databaseHelper.insertRecipeItem(name);
+        recipeId = (int) newId;
+        createRecipeListView(getContext());
     }
 
     /*@Override
@@ -224,4 +237,8 @@ public class RecipeListFragment extends Fragment {
             mainActivityLayout.updateNotesListView();
         }
     }*/
+
+    public int getRecipeId() {
+        return recipeId;
+    }
 }
