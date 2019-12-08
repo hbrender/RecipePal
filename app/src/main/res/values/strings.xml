@@ -15,10 +15,15 @@
     <string name="total_servings">\u0020total servings</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
     <string name="delete_recipe_message">Are you sure you want to delete the selected recipe(s)?</string>
     <string name="delete_recipe">Delete Recipe</string>
     <string name="delete_ingredient_message">Are you sure you want to delete the selected ingredients(s)?</string>
     <string name="delete_ingredient">Delete Ingredient</string>
     <string name="delete_instruction_message">Are you sure you want to delete the selected instructions(s)?</string>
     <string name="delete_instruction">Delete Instructions</string>
+    <string name="step">step #</string>
+    <string name="content">content</string>
+    <string name="add_photo">Add Photo</string>
 </resources>

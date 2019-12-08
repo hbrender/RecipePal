@@ -7,14 +7,14 @@
     android:padding="15dp">
 
     <EditText
-        android:id="@+id/ingredientAmountTextView"
+        android:id="@+id/amountEditText"
         android:hint="amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"/>
 
     <EditText
-        android:id="@+id/ingredientNameTextView"
+        android:id="@+id/nameEditText"
         android:hint="name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.example.recipepal.R;
 import com.example.recipepal.dialogs.AddIngredientDialog;
+import com.example.recipepal.dialogs.AddInstructionDialog;
 import com.example.recipepal.helpers.DatabaseHelper;
 import com.example.recipepal.helpers.UIUtils;
 import com.google.android.material.snackbar.Snackbar;
@@ -362,21 +363,14 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
             Snackbar snackbar = Snackbar.make(gridLayout, getString(R.string.ingredients_added), Snackbar.LENGTH_LONG);
             snackbar.show();
         } else {
-            openAddIngredientDialog();
+            AddIngredientDialog dialog = new AddIngredientDialog();
+            dialog.show(getSupportFragmentManager(), "Add ingredient");
         }
     }
 
-    public void openAddIngredientDialog() {
-        AddIngredientDialog dialog = new AddIngredientDialog();
-        dialog.show(getSupportFragmentManager(), "Add ingredient");
-    }
-
-    public void addIntructionButtonOnClick(View view) {
-        Toast.makeText(this, "add instructions", Toast.LENGTH_SHORT).show();
-    }
-
     public void addInstructionButtonOnClick(View view) {
-        Toast.makeText(this, "TODO: add instruction", Toast.LENGTH_SHORT).show();
+        AddInstructionDialog dialog = new AddInstructionDialog();
+        dialog.show(getSupportFragmentManager(), "Add instruction");
     }
 
     @Override
