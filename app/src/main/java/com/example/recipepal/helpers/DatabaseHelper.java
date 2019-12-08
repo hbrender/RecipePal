@@ -110,8 +110,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_GROCERY_LIST + " VALUES(3, 0, 3)");
         db.execSQL("INSERT INTO " + TABLE_GROCERY_LIST + " VALUES(4, 1, 4)");
 
-        db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(1, 'The World''s Easiest Cookies', null, '30 min', '16 cookies', 1)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(1, 'The Worlds Easiest Cookies', null, '30 min', '16 cookies', 1)");
         db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(2, 'White Pizza with Pesto Parsely Drizzle', null, '40 min', '8 slices', 0)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE + " VALUES(3, 'Red Pepper Linguine', null, '20 min', '1 serving', 0)");
 
         db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(1, 1, 1, "
                 + "'Preheat the oven to 350°F. Line a cookie sheet or rimmed baking sheet with parchment paper.', "
@@ -130,7 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "0, null)");
         db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(6, 1, 6, "
                 + "'Place the tray in the oven and bake for about 12 minutes, turning the tray 180° at the the halfway point. The cookies are ready when the edges are golden brown.', "
-                + "'12:00:00', null)");
+                + "'12:00', null)");
 
         db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(5, 'almond flour', '2 cups')");
         db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(6, 'baking soda', '1/2 tsp')");
@@ -143,6 +144,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(3, 1, 7)");
         db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(4, 1, 8)");
         db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(5, 1, 9)");
+
+
+        db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(7, 3, 1, "
+                + "'Blitz the roasted red pepper with the olive oil, walnuts and garlic in a food processor, season well and set aside.', "
+                + "0, null)");
+        db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(8, 3, 2, "
+                + "'Bring a pan of water to a boil. Add pasta and cook for one min less than the package says. Reserve a ladleful of cooking water', "
+                + "0, null)");
+        db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(9, 3, 3, "
+                + "'Put pasta, reserved pasta water, and red pepper sauce into the pan. Heat on medium for 5 min', "
+                + "'5:00', null)");
+        db.execSQL("INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(10, 3, 4, "
+                + "'Top pasta with parmesan and some chopped toasted walnuts.', "
+                + "0, null)");
+
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(10, 'roasted red pepper', '1')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(11, 'olive oil', '30 ml')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(12, 'toasted walnuts', '50 g')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(13, 'garlic clove', '1 small')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(14, 'linguine', '100 g')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(15, 'parmesan', '')");
+
+        db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(6, 3, 10)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(7, 3, 11)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(8, 3, 12)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(9, 3, 13)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(10, 3, 14)");
+        db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(11, 3, 15)");
     }
 
     @Override
@@ -265,6 +294,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + favorited + " WHERE " + ID + " = " + groceryId;
 
         Log.d(TAG, "updateGroceryItemChecked: " + sqlUpdate);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sqlUpdate);
+        db.close();
+    }
+
+    /**
+     * Update a recipe's information
+     * @param recipeId
+     */
+    public void updateRecipe(int recipeId, String name, String time, String servings) {
+        String sqlUpdate = "UPDATE " + TABLE_RECIPE + " SET "
+                + NAME + " = '" + name + "', "
+                + TIME + " = '" + time + "', "
+                + SERVINGS + " = '" + servings
+                + "' WHERE " + ID + " = " + recipeId;
+
+        Log.d(TAG, "updateRecipe: " + sqlUpdate);
 
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(sqlUpdate);

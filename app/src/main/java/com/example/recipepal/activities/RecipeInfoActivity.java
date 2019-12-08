@@ -11,7 +11,10 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
@@ -38,6 +41,9 @@ import com.example.recipepal.helpers.DatabaseHelper;
 import com.example.recipepal.helpers.UIUtils;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 //https://www.youtube.com/watch?v=plQIpqBcdQE (referenced for custom circular button)
 //https://stackoverflow.com/questions/6210895/listview-inside-scrollview-is-not-scrolling-on-android/6211286#6211286 (referenced for listview touch listener)
 //https://stackoverflow.com/questions/6912237/how-to-return-to-default-style-on-edittext-if-i-apply-a-background (referenced for making edittext look like textview)
@@ -45,6 +51,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class RecipeInfoActivity extends AppCompatActivity implements AddIngredientDialog.AddIngredientDialogListener, AddInstructionDialog.AddInstructionDialogListener {
     static final String TAG = "RecipeActivityTag";
+    static final int RESULT_LOAD_IMG = 1;
     DatabaseHelper databaseHelper;
     int recipeId;
 
@@ -217,14 +224,24 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     public void setRecipeInfo() {
         final Cursor cursor = databaseHelper.getRecipeByIdCursor(recipeId);
         if (cursor.getColumnCount() > 0 && cursor.moveToPosition(0)) {
-            recipeNameTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-
-            if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)) != null) {
-                totalTimeTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)));
+            if(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)).length() != 0) {
+                recipeNameTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+            } else {
+                recipeNameTextView.setText(null);
             }
 
-            if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)) != null) {
+            if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)) != null &&
+                    cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)).length() != 0) {
+                totalTimeTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)));
+            } else {
+                totalTimeTextView.setText(null);
+            }
+
+            if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)) != null&&
+                    cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)).length() != 0) {
                 servingsTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)));
+            } else {
+                servingsTextView.setText(null);
             }
         }
 
@@ -318,6 +335,33 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         UIUtils.setListViewHeightBasedOnItems(instructionListView, this);
     }
 
+    public void addPhotoButtonOnClick(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, RESULT_LOAD_IMG);
+    }
+
+    @Override
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                //image_view.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(RecipeInfoActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(RecipeInfoActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void disableEditing() {
         Log.d(TAG, "disableEditing: here");
         recipeNameTextView.setEnabled(false);
@@ -357,6 +401,14 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
 
         // CAM for list views
         setMultiChoiceModeListeners();
+    }
+
+    public void saveRecipeInfo() {
+        String name = recipeNameTextView.getText().toString();
+        String time = totalTimeTextView.getText().toString();
+        String servings = servingsTextView.getText().toString();
+
+        databaseHelper.updateRecipe(recipeId, name, time, servings);
     }
 
     public void startRecipeButtonOnClick(View view) {
@@ -402,6 +454,7 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
                 return true;
             case R.id.saveMenuItem:
                 // check if recipe info can be saved with no errors
+                saveRecipeInfo();
                 disableEditing();
                 editMenuItem.setVisible(true);
                 saveMenuItem.setVisible(false);
