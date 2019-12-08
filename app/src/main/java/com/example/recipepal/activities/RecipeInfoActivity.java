@@ -1,18 +1,22 @@
 package com.example.recipepal.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
@@ -70,6 +74,8 @@ public class RecipeInfoActivity extends AppCompatActivity {
         addIngredientsButton = findViewById(R.id.addIngredientsButton);
         addInstructionsButton = findViewById(R.id.addInstructionButton);
         startRecipeButton = findViewById(R.id.startRecipeButton);
+        ingredientsListView = findViewById(R.id.ingredientsListView);
+        instructionListView = findViewById(R.id.instructionsListView);
 
         // get original background of edit texts
         recipeNameOriginalDrawable = recipeNameTextView.getBackground();
@@ -87,6 +93,119 @@ public class RecipeInfoActivity extends AppCompatActivity {
 
             }
         }
+
+        setMultiChoiceModeListeners();
+    }
+
+    /**
+     * Sets multi choice mode listeners for ingredients list view and instructions list view
+     */
+    public void setMultiChoiceModeListeners() {
+        ingredientsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        ingredientsListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                int numChecked = ingredientsListView.getCheckedItemCount();
+                mode.setTitle(numChecked + " ingredients selected");
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater menuInflater = getMenuInflater();
+                menuInflater.inflate(R.menu.cam_menu, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.deleteMenuItem:
+                        final long[] checkIds = ingredientsListView.getCheckedItemIds();
+
+                        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(RecipeInfoActivity.this);
+                        alertBuilder.setTitle(getString(R.string.delete_recipe))
+                                .setMessage(getString(R.string.delete_recipe_message))
+                                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // delete all selected recipes
+                                        for (long id: checkIds) {
+                                            //databaseHelper.deleteRecipeById((int) id);
+                                            //createRecipeListView(getContext()); // update list view
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, null);
+                        alertBuilder.show();
+
+                        mode.finish(); // exit cam
+                        return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+            }
+        });
+
+        instructionListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        instructionListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                int numChecked = instructionListView.getCheckedItemCount();
+                mode.setTitle(numChecked + " instructions selected");
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater menuInflater = getMenuInflater();
+                menuInflater.inflate(R.menu.cam_menu, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.deleteMenuItem:
+                        final long[] checkIds = instructionListView.getCheckedItemIds();
+
+                        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(RecipeInfoActivity.this);
+                        alertBuilder.setTitle(getString(R.string.delete_recipe))
+                                .setMessage(getString(R.string.delete_recipe_message))
+                                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // delete all selected recipes
+                                        for (long id: checkIds) {
+                                            //databaseHelper.deleteRecipeById((int) id);
+                                            //createRecipeListView(getContext()); // update list view
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, null);
+                        alertBuilder.show();
+
+                        mode.finish(); // exit cam
+                        return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+            }
+        });
     }
 
     public void setRecipeInfo() {
@@ -220,10 +339,14 @@ public class RecipeInfoActivity extends AppCompatActivity {
             GridLayout gridLayout = findViewById(R.id.gridLayout);
             Snackbar snackbar = Snackbar.make(gridLayout, getString(R.string.ingredients_added), Snackbar.LENGTH_LONG);
             snackbar.show();
+        } else {
+            Toast.makeText(this, "add ingredient", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void addIntructionButtonOnClick(View view) {
+        Toast.makeText(this, "add instructions", Toast.LENGTH_SHORT).show();
+
 
     }
 

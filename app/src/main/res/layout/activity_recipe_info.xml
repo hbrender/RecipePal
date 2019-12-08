@@ -87,7 +87,7 @@ android:divider="?android:dividerHorizontal">
 
     <ListView
         android:id="@+id/ingredientsListView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_columnSpan="2"
         android:minHeight="?android:attr/listPreferredItemHeight"/>
@@ -117,7 +117,7 @@ android:divider="?android:dividerHorizontal">
 
     <ListView
         android:id="@+id/instructionsListView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_columnSpan="2"
         android:minHeight="?android:attr/listPreferredItemHeight"/>
