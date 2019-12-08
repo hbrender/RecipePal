@@ -23,13 +23,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.recipepal.R;
+import com.example.recipepal.dialogs.AddGroceryDialog;
 import com.example.recipepal.helpers.DatabaseHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 public class GroceryListFragment extends Fragment {
     static final String TAG = "GroceryListFragmentTag";
     DatabaseHelper databaseHelper;
     ListView groceryListListView;
     SimpleCursorAdapter simpleCursorAdapter;
+    FloatingActionButton addGroceryFab;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,10 +42,19 @@ public class GroceryListFragment extends Fragment {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_grocerylist, container, false);
+        final View view = inflater.inflate(R.layout.fragment_grocerylist, container, false);
 
         groceryListListView = view.findViewById(R.id.groceryListListView);
         createGroceryListListView(getContext());
+
+        addGroceryFab = view.findViewById(R.id.addGroceryFab);
+        addGroceryFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddGroceryDialog dialog = new AddGroceryDialog(GroceryListFragment.this);
+                dialog.show(getActivity().getSupportFragmentManager(), "Add Grocery");
+            }
+        });
 
         return view;
     }
@@ -121,5 +134,14 @@ public class GroceryListFragment extends Fragment {
         createGroceryListListView(getContext());
 
         Log.d(TAG, "onResume: ");
+    }
+
+    public void applyTexts(String name, String quantity) {
+        long newId = databaseHelper.insertIngredientItem(quantity, name);
+        int ingredientID = (int) newId;
+        databaseHelper.insertGroceryListItem(ingredientID);
+
+        createGroceryListListView(getContext());
+
     }
 }

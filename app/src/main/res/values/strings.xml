@@ -27,4 +27,7 @@
     <string name="content">content</string>
     <string name="add_photo">Add Photo</string>
     <string name="name">name</string>
+    <string name="add_grocery">Add Grocery</string>
+    <string name="add_grocery_name_hint">Name</string>
+    <string name="add_grocery_quantity">Quantity</string>
 </resources>

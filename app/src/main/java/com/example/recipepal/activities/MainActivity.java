@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.recipepal.R;
+import com.example.recipepal.dialogs.AddGroceryDialog;
 import com.example.recipepal.dialogs.AddRecipeDialog;
 import com.example.recipepal.fragments.GroceryListFragment;
 import com.example.recipepal.fragments.RecipeListFragment;
@@ -33,12 +34,13 @@ import java.util.List;
 //<div>Icons made by <a href="https://www.flaticon.com/authors/nikita-golubev" title="Nikita Golubev">Nikita Golubev</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 
 //https://stackoverflow.com/questions/47714606/viewpager-using-bottom-navigation-view-is-not-swiping-the-fragments (referenced for viewpager with bottom navigation)
-public class MainActivity extends AppCompatActivity implements AddRecipeDialog.AddRecipeDialogListener {
+public class MainActivity extends AppCompatActivity implements AddRecipeDialog.AddRecipeDialogListener, AddGroceryDialog.AddGroceryDialogListener {
     DatabaseHelper databaseHelper = new DatabaseHelper(this);
     MenuItem prevMenuItem;
     BottomNavigationView bottomNavigationView;
     ViewPager viewPager;
     RecipeListFragment recipeListFragment;
+    GroceryListFragment groceryListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +102,8 @@ public class MainActivity extends AppCompatActivity implements AddRecipeDialog.A
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         recipeListFragment = new RecipeListFragment();
         viewPagerAdapter.addFragment(recipeListFragment);
-        viewPagerAdapter.addFragment(new GroceryListFragment());
+        groceryListFragment = new GroceryListFragment();
+        viewPagerAdapter.addFragment(groceryListFragment);
         viewPager.setAdapter(viewPagerAdapter);
     }
 
@@ -129,5 +132,10 @@ public class MainActivity extends AppCompatActivity implements AddRecipeDialog.A
     @Override
     public void applyTexts(String name) {
         recipeListFragment.applyTexts(name);
+    }
+
+    @Override
+    public void applyTexts(String name, String quantity) {
+        groceryListFragment.applyTexts(name, quantity);
     }
 }
