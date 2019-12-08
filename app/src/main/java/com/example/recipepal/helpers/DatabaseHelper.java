@@ -2,6 +2,7 @@
 
 package com.example.recipepal.helpers;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -134,9 +135,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(5, 'almond flour', '2 cups')");
         db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(6, 'baking soda', '1/2 tsp')");
-        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(7, 'almond flour', '1/8 tsp')");
-        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(8, 'almond flour', '1/3 cup')");
-        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(9, 'almond flour', '2 tsp')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(7, 'salt', '1/8 tsp')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(8, 'maple syrup', '1/3 cup')");
+        db.execSQL("INSERT INTO " + TABLE_INGREDIENTS + " VALUES(9, 'vanilla extract', '2 tsp')");
 
         db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(1, 1, 5)");
         db.execSQL("INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(2, 1, 6)");
@@ -281,6 +282,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public long insertIngredientItem(String amount, String name) {
+        ContentValues values = new ContentValues();
+        values.put(AMOUNT, amount);
+        values.put(NAME, name);
+
+        SQLiteDatabase db = getWritableDatabase();
+        long result = db.insert(TABLE_INGREDIENTS, null, values);
+        db.close();
+
+        return result;
+    }
+
+    public void insertRecipeIngredientItem(int recipeId, int ingredientId) {
+        String sqlInsert = "INSERT INTO " + TABLE_RECIPE_INGREDIENTS + " VALUES(null, "
+                + recipeId + ", " + ingredientId + ")";
+
+        Log.d(TAG, "insertRecipeIngredientItem: " + sqlInsert);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sqlInsert);
+        db.close();
+    }
+
     /**
      * Delete a recipe and its ingredients and instructions
      * @param recipeId the id matching the recipe to delete
@@ -300,15 +324,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param recipeIngredientId the id matching the recipe ingredient to delete
      */
     public void deleteIngredientById(int recipeIngredientId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        //db.delete(TABLE_RECIPE_INGREDIENTS, ID + " = ?", new String[] { String.valueOf(recipeIngredientId)});
-
         String sqlDelete = "DELETE FROM " + TABLE_RECIPE_INGREDIENTS
                 + " WHERE " + INGREDIENT_ID + " = " + recipeIngredientId;
 
         Log.d(TAG, "deleteIngredientById: " + sqlDelete);
 
+        SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sqlDelete);
         db.close();
     }
@@ -318,15 +339,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param instructionId the id matching the recipe instruction to delete
      */
     public void deleteInstructionById(int instructionId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        //db.delete(TABLE_INSTRUCTIONS, ID + " = ?", new String[] { String.valueOf(instructionId)});
-
         String sqlDelete = "DELETE FROM " + TABLE_INSTRUCTIONS
                 + " WHERE " + ID + " = " + instructionId;
 
         Log.d(TAG, "deleteInstructionById: " + sqlDelete);
 
+        SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sqlDelete);
         db.close();
     }

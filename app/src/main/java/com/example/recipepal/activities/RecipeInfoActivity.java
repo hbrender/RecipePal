@@ -1,9 +1,13 @@
 package com.example.recipepal.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.appcompat.app.AppCompatDialogFragment;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipepal.R;
+import com.example.recipepal.dialogs.AddIngredientDialog;
 import com.example.recipepal.helpers.DatabaseHelper;
 import com.example.recipepal.helpers.UIUtils;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,7 +41,7 @@ import com.google.android.material.snackbar.Snackbar;
 //https://stackoverflow.com/questions/6912237/how-to-return-to-default-style-on-edittext-if-i-apply-a-background (referenced for making edittext look like textview)
 //https://stackoverflow.com/questions/16337063/how-to-change-the-default-disabled-edittexts-style (referenced for setting edittext disabled colors)
 
-public class RecipeInfoActivity extends AppCompatActivity {
+public class RecipeInfoActivity extends AppCompatActivity implements AddIngredientDialog.AddIngredientDialogListener {
     static final String TAG = "RecipeActivityTag";
     DatabaseHelper databaseHelper;
     int recipeId;
@@ -90,11 +96,9 @@ public class RecipeInfoActivity extends AppCompatActivity {
                 setRecipeInfo();
                 disableEditing();
             } else {
-
+                setMultiChoiceModeListeners();
             }
         }
-
-        setMultiChoiceModeListeners();
     }
 
     /**
@@ -133,7 +137,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
                                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        // delete all selected recipes
+                                        // delete all selected ingredients
                                         for (long id: checkIds) {
                                             databaseHelper.deleteIngredientById((int) id);
                                             setIngredientsListView(); // update list view
@@ -186,7 +190,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
                                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        // delete all selected recipes
+                                        // delete all selected instructions
                                         for (long id: checkIds) {
                                             databaseHelper.deleteInstructionById((int) id);
                                             setInstructionListView(); // update list view
@@ -301,6 +305,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
     }
 
     public void disableEditing() {
+        Log.d(TAG, "disableEditing: here");
         recipeNameTextView.setEnabled(false);
         totalTimeTextView.setEnabled(false);
         servingsTextView.setEnabled(false);
@@ -357,14 +362,17 @@ public class RecipeInfoActivity extends AppCompatActivity {
             Snackbar snackbar = Snackbar.make(gridLayout, getString(R.string.ingredients_added), Snackbar.LENGTH_LONG);
             snackbar.show();
         } else {
-            Toast.makeText(this, "add ingredient", Toast.LENGTH_SHORT).show();
+            openAddIngredientDialog();
         }
+    }
+
+    public void openAddIngredientDialog() {
+        AddIngredientDialog dialog = new AddIngredientDialog();
+        dialog.show(getSupportFragmentManager(), "Add ingredient");
     }
 
     public void addIntructionButtonOnClick(View view) {
         Toast.makeText(this, "add instructions", Toast.LENGTH_SHORT).show();
-
-
     }
 
     public void addInstructionButtonOnClick(View view) {
@@ -411,5 +419,15 @@ public class RecipeInfoActivity extends AppCompatActivity {
         }
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void applyTexts(String amount, String name) {
+        long ingredientId = databaseHelper.insertIngredientItem(amount, name);
+
+        if (ingredientId != -1) { // check if error occured
+            databaseHelper.insertRecipeIngredientItem(recipeId, (int) ingredientId);
+            setIngredientsListView();
+        }
     }
 }

@@ -26,6 +26,7 @@ import com.example.recipepal.R;
 import com.example.recipepal.helpers.DatabaseHelper;
 
 public class GroceryListFragment extends Fragment {
+    static final String TAG = "GroceryListFragmentTag";
     DatabaseHelper databaseHelper;
     ListView groceryListListView;
     SimpleCursorAdapter simpleCursorAdapter;
@@ -38,6 +39,7 @@ public class GroceryListFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_grocerylist, container, false);
+
         groceryListListView = view.findViewById(R.id.groceryListListView);
         createGroceryListListView(getContext());
 
@@ -110,5 +112,14 @@ public class GroceryListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         // menuInflater.inflate(R.menu.grocery_list_menu, menu);
         super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        createGroceryListListView(getContext());
+
+        Log.d(TAG, "onResume: ");
     }
 }
