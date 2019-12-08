@@ -33,6 +33,7 @@ import java.util.List;
 //<div>Icons made by <a href="https://www.flaticon.com/authors/nikita-golubev" title="Nikita Golubev">Nikita Golubev</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 
 //https://stackoverflow.com/questions/47714606/viewpager-using-bottom-navigation-view-is-not-swiping-the-fragments (referenced for viewpager with bottom navigation)
+
 public class MainActivity extends AppCompatActivity implements AddRecipeDialog.AddRecipeDialogListener {
     DatabaseHelper databaseHelper = new DatabaseHelper(this);
     MenuItem prevMenuItem;
