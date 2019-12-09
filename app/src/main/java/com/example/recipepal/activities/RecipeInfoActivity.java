@@ -49,6 +49,7 @@ import java.io.InputStream;
 //https://stackoverflow.com/questions/6210895/listview-inside-scrollview-is-not-scrolling-on-android/6211286#6211286 (referenced for listview touch listener)
 //https://stackoverflow.com/questions/6912237/how-to-return-to-default-style-on-edittext-if-i-apply-a-background (referenced for making edittext look like textview)
 //https://stackoverflow.com/questions/16337063/how-to-change-the-default-disabled-edittexts-style (referenced for setting edittext disabled colors)
+//https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview (referenced for adding photos from photo gallery)
 
 public class RecipeInfoActivity extends AppCompatActivity implements AddIngredientDialog.AddIngredientDialogListener, AddInstructionDialog.AddInstructionDialogListener {
     static final String TAG = "RecipeActivityTag";
