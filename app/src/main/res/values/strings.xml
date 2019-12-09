@@ -30,4 +30,6 @@
     <string name="add_grocery">Add Grocery</string>
     <string name="add_grocery_name_hint">Name</string>
     <string name="add_grocery_quantity">Quantity</string>
+    <string name="delete_grocery">Delete Grocery Item</string>
+    <string name="delete_grocery_message">Are you sure you want to delete the selected grocery item(s)?</string>
 </resources>

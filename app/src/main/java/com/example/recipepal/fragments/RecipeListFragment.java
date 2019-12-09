@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.recipepal.R;
+import com.example.recipepal.activities.MainActivity;
 import com.example.recipepal.activities.RecipeInfoActivity;
 import com.example.recipepal.dialogs.AddInstructionDialog;
 import com.example.recipepal.dialogs.AddRecipeDialog;
@@ -241,4 +243,5 @@ public class RecipeListFragment extends Fragment {
     public int getRecipeId() {
         return recipeId;
     }
+
 }

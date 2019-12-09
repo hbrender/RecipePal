@@ -18,8 +18,8 @@ import com.example.recipepal.fragments.GroceryListFragment;
 import com.example.recipepal.fragments.RecipeListFragment;
 
 public class AddGroceryDialog extends AppCompatDialogFragment {
-    private EditText groceryName;
-    private EditText groceryQuantity;
+    private EditText nameEditText;
+    private EditText amountEditText;
     AddGroceryDialogListener listener;
     GroceryListFragment groceryListFragment;
 
@@ -34,10 +34,10 @@ public class AddGroceryDialog extends AppCompatDialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View view = inflater.inflate(R.layout.dialog_add_grocery, null);
+        View view = inflater.inflate(R.layout.dialog_add_ingredient, null);
 
-        groceryName = (EditText) view.findViewById(R.id.groceryItemName);
-        groceryQuantity = (EditText) view.findViewById(R.id.groceryItemQuantity);
+        nameEditText = view.findViewById(R.id.nameEditText);
+        amountEditText = view.findViewById(R.id.amountEditText);
 
         builder.setView(view)
                 .setTitle(R.string.add_grocery)
@@ -45,9 +45,9 @@ public class AddGroceryDialog extends AppCompatDialogFragment {
                 .setPositiveButton(getString(R.string.add), new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String name = groceryName.getText().toString();
-                        String quantity = groceryQuantity.getText().toString();
-                        listener.applyTexts(name, quantity);
+                        String name = nameEditText.getText().toString();
+                        String amount = amountEditText.getText().toString();
+                        listener.applyTexts(name, amount);
                     }
                 });
 
@@ -66,6 +66,6 @@ public class AddGroceryDialog extends AppCompatDialogFragment {
     }
 
     public interface AddGroceryDialogListener {
-        void applyTexts(String name, String quantity);
+        void applyTexts(String name, String amount);
     }
 }

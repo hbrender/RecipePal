@@ -77,7 +77,7 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         setContentView(R.layout.activity_recipe_info);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // home button
-        getSupportActionBar().setDisplayShowTitleEnabled(false); // no title
+        //getSupportActionBar().setDisplayShowTitleEnabled(false); // no title
 
         databaseHelper = new DatabaseHelper(this);
 

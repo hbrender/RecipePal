@@ -34,6 +34,8 @@ import java.util.List;
 //<div>Icons made by <a href="https://www.flaticon.com/authors/nikita-golubev" title="Nikita Golubev">Nikita Golubev</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 
 //https://stackoverflow.com/questions/47714606/viewpager-using-bottom-navigation-view-is-not-swiping-the-fragments (referenced for viewpager with bottom navigation)
+//https://stackoverflow.com/questions/29847194/setting-action-bar-title-in-viewpager (referenced for setting fragments's titles)
+
 public class MainActivity extends AppCompatActivity implements AddRecipeDialog.AddRecipeDialogListener, AddGroceryDialog.AddGroceryDialogListener {
     DatabaseHelper databaseHelper = new DatabaseHelper(this);
     MenuItem prevMenuItem;
@@ -41,11 +43,14 @@ public class MainActivity extends AppCompatActivity implements AddRecipeDialog.A
     ViewPager viewPager;
     RecipeListFragment recipeListFragment;
     GroceryListFragment groceryListFragment;
+    static String[] titles = {"Recipes", "Grocery List"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().setTitle(titles[0]); // initially Recipes
 
         //BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -90,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements AddRecipeDialog.A
                 }
                 bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottomNavigationView.getMenu().getItem(position);
+
+                // set correct action bar title
+                getSupportActionBar().setTitle(titles[position]);
             }
 
 
@@ -135,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements AddRecipeDialog.A
     }
 
     @Override
-    public void applyTexts(String name, String quantity) {
-        groceryListFragment.applyTexts(name, quantity);
+    public void applyTexts(String name, String amount) {
+        groceryListFragment.applyTexts(name, amount);
     }
 }
