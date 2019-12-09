@@ -373,7 +373,14 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         totalTimeTextView.setBackgroundResource(android.R.color.transparent);
         servingsTextView.setBackgroundResource(android.R.color.transparent);
 
-        addIngredientsButton.setText(getString(R.string.title_grocery_list));
+        Cursor cursor = databaseHelper.getAllRecipeIngredientsByIdCursor(recipeId);
+        // hide add grocery button if no ingredients
+        if (cursor.getCount() == 0) {
+            addIngredientsButton.setVisibility(View.INVISIBLE);
+        } else {
+            addIngredientsButton.setText(getString(R.string.title_grocery_list));
+        }
+
         addInstructionsButton.setVisibility(View.INVISIBLE);
         startRecipeButton.setEnabled(true);
 
