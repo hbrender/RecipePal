@@ -42,21 +42,22 @@ android:divider="?android:dividerHorizontal">
         android:padding="10dp"
         android:visibility="gone"
         android:onClick="addMainRecipePhotoButtonOnClick"
-        android:textColor="@android:color/white"
-        android:background="@drawable/rounded_button" />
+        android:textColor="@color/colorPrimaryDark"
+        android:drawableLeft="@drawable/ic_add_24dp"
+        android:background="@android:color/transparent" />
 
     <Button
         android:id="@+id/startRecipeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="fill_horizontal"
-        android:layout_margin="10dp"
+        android:layout_margin="8dp"
         android:background="@drawable/rounded_button"
         android:text="Start Recipe"
         android:layout_columnSpan="2"
         android:onClick="startRecipeButtonOnClick"
         android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/totalTimeTextView"

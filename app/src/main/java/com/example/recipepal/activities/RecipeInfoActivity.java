@@ -6,14 +6,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,6 +60,9 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     static final String TAG = "RecipeActivityTag";
     static final int RESULT_LOAD_MAIN_RECIPE_IMG = 1;
     static final int RESULT_LOAD_INSTRUCTION_IMG = 2;
+    static final int REQUEST_CODE_MAIN_RECIPE_GALLERY = 3;
+    static final int REQUEST_CODE_INSTRUCTION_GALLERY = 4;
+
     DatabaseHelper databaseHelper;
     int recipeId;
 
@@ -242,14 +250,14 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
 
             if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)) != null &&
                     cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)).length() != 0) {
-                totalTimeTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)));
+                totalTimeTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME)));
             } else {
                 totalTimeTextView.setText(null);
             }
 
             if (cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)) != null&&
                     cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)).length() != 0) {
-                servingsTextView.setText(" " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)));
+                servingsTextView.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SERVINGS)));
             } else {
                 servingsTextView.setText(null);
             }
@@ -493,15 +501,33 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     }
 
     public void addMainRecipePhotoButtonOnClick(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, RESULT_LOAD_MAIN_RECIPE_IMG);
+        ActivityCompat.requestPermissions(RecipeInfoActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_MAIN_RECIPE_GALLERY);
     }
 
     public void addInstructionPhotoButtonOnClick(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, RESULT_LOAD_INSTRUCTION_IMG);
+        ActivityCompat.requestPermissions(RecipeInfoActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_INSTRUCTION_GALLERY);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_MAIN_RECIPE_GALLERY) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, RESULT_LOAD_MAIN_RECIPE_IMG);
+            }
+        }
+
+        if (requestCode == REQUEST_CODE_INSTRUCTION_GALLERY) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, RESULT_LOAD_INSTRUCTION_IMG);
+            } else {
+                ActivityCompat.requestPermissions(RecipeInfoActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_INSTRUCTION_GALLERY);
+            }
+        }
     }
 
     @Override
