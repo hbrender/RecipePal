@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.RecipeInfoActivity"></activity>
+        <activity android:name=".activities.RecipeInfoActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name">

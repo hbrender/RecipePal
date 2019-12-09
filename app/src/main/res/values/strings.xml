@@ -32,4 +32,6 @@
     <string name="add_grocery_quantity">Quantity</string>
     <string name="delete_grocery">Delete Grocery Item</string>
     <string name="delete_grocery_message">Are you sure you want to delete the selected grocery item(s)?</string>
+    <string name="start_recipe">Start Recipe</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

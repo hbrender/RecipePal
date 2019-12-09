@@ -29,6 +29,7 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -51,7 +52,8 @@ import java.io.InputStream;
 
 public class RecipeInfoActivity extends AppCompatActivity implements AddIngredientDialog.AddIngredientDialogListener, AddInstructionDialog.AddInstructionDialogListener {
     static final String TAG = "RecipeActivityTag";
-    static final int RESULT_LOAD_IMG = 1;
+    static final int RESULT_LOAD_MAIN_RECIPE_IMG = 1;
+    static final int RESULT_LOAD_INSTRUCTION_IMG = 2;
     DatabaseHelper databaseHelper;
     int recipeId;
 
@@ -60,9 +62,12 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     EditText servingsTextView;
     ListView ingredientsListView;
     ListView instructionListView;
+    ImageView recipeImageView;
     Button addIngredientsButton;
     Button addInstructionsButton;
     Button startRecipeButton;
+    Button addMainRecipePhotoButton;
+    Button addInstructionPhotoButton;
     MenuItem editMenuItem;
     MenuItem saveMenuItem;
     SimpleCursorAdapter ingredientsAdapter;
@@ -70,6 +75,7 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     Drawable recipeNameOriginalDrawable;
     Drawable totalTimeOriginalDrawable;
     Drawable servingsOriginalDrawable;
+    AddInstructionDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +97,9 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         startRecipeButton = findViewById(R.id.startRecipeButton);
         ingredientsListView = findViewById(R.id.ingredientsListView);
         instructionListView = findViewById(R.id.instructionsListView);
+        recipeImageView = findViewById(R.id.recipeImageView);
+        addMainRecipePhotoButton = findViewById(R.id.addMainRecipePhotoButton);
+        addInstructionPhotoButton = findViewById(R.id.addInstructionPhotoButton);
 
         // get original background of edit texts
         recipeNameOriginalDrawable = recipeNameTextView.getBackground();
@@ -335,33 +344,6 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         UIUtils.setListViewHeightBasedOnItems(instructionListView, this);
     }
 
-    public void addPhotoButtonOnClick(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, RESULT_LOAD_IMG);
-    }
-
-    @Override
-    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
-        super.onActivityResult(reqCode, resultCode, data);
-
-
-        if (resultCode == RESULT_OK) {
-            try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                //image_view.setImageBitmap(selectedImage);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Toast.makeText(RecipeInfoActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-            }
-
-        }else {
-            Toast.makeText(RecipeInfoActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
-        }
-    }
-
     public void disableEditing() {
         Log.d(TAG, "disableEditing: here");
         recipeNameTextView.setEnabled(false);
@@ -382,7 +364,8 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         }
 
         addInstructionsButton.setVisibility(View.INVISIBLE);
-        startRecipeButton.setEnabled(true);
+        addMainRecipePhotoButton.setVisibility(View.GONE);
+        startRecipeButton.setVisibility(View.VISIBLE);
 
         // no CAM for list view when recipe is not in edit mode
         ingredientsListView.clearChoices();
@@ -404,7 +387,10 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         addIngredientsButton.setText("");
         addIngredientsButton.setVisibility(View.VISIBLE);
         addInstructionsButton.setVisibility(View.VISIBLE);
-        startRecipeButton.setEnabled(false);
+        if (recipeImageView.getDrawable() == null) {
+            addMainRecipePhotoButton.setVisibility(View.VISIBLE);
+        }
+        startRecipeButton.setVisibility(View.GONE);
 
         // CAM for list views
         setMultiChoiceModeListeners();
@@ -442,7 +428,7 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     }
 
     public void addInstructionButtonOnClick(View view) {
-        AddInstructionDialog dialog = new AddInstructionDialog();
+        dialog = new AddInstructionDialog();
         dialog.show(getSupportFragmentManager(), "Add instruction");
     }
 
@@ -503,5 +489,43 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     public void applyTexts(String step, String content, String timer) {
         databaseHelper.insertInstructionItem(recipeId, step, content, timer, -1);
         setInstructionListView();
+    }
+
+    public void addMainRecipePhotoButtonOnClick(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, RESULT_LOAD_MAIN_RECIPE_IMG);
+    }
+
+    public void addInstructionPhotoButtonOnClick(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, RESULT_LOAD_INSTRUCTION_IMG);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == RESULT_LOAD_MAIN_RECIPE_IMG) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                recipeImageView.setImageBitmap(selectedImage);
+                addMainRecipePhotoButton.setVisibility(View.GONE);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (resultCode == RESULT_OK && requestCode == RESULT_LOAD_INSTRUCTION_IMG) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                dialog.sendImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

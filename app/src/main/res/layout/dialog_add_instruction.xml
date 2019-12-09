@@ -28,12 +28,17 @@
         android:inputType="time"/>
 
     <Button
-        android:id="@+id/addPhotoButton"
+        android:id="@+id/addInstructionPhotoButton"
         android:text="@string/add_photo"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="addPhotoButtonOnClick"
+        android:onClick="addInstructionPhotoButtonOnClick"
         android:textColor="@android:color/white"
         android:background="@color/colorSecondaryAccent"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
