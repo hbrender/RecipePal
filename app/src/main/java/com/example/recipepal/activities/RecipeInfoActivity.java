@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
@@ -415,10 +416,12 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
 
     public void startRecipeButtonOnClick(View view) {
         Intent intent = new Intent(this, InteractiveRecipeActivity.class);
-
         intent.putExtra("ID", recipeId);
 
-        startActivity(intent);
+        Bundle options = ActivityOptionsCompat.makeScaleUpAnimation(
+                instructionListView.getChildAt(0),0, 0, instructionListView.getChildAt(0).getWidth(), instructionListView.getChildAt(0).getHeight()).toBundle();
+
+        startActivity(intent, options);
     }
 
     public void addIngredientButtonOnClick(View view) {
