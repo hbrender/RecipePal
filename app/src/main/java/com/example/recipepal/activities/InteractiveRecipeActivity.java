@@ -27,7 +27,7 @@ public class InteractiveRecipeActivity extends AppCompatActivity {
     Cursor cursor;
     List<String> contentList;
     List<Integer> timeList;
-    List<Integer> imageList;
+    List<byte[]> imageList;
     int size;
     ViewPager viewPager;
     ImageButton exit;
@@ -50,7 +50,7 @@ public class InteractiveRecipeActivity extends AppCompatActivity {
         while (cursor.moveToNext()) {
             contentList.add(cursor.getString(3));
             timeList.add(cursor.getInt(4));
-            imageList.add(cursor.getInt(5));
+            imageList.add(cursor.getBlob(5));
             size++;
         }
 

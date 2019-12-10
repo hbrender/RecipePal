@@ -1,6 +1,8 @@
 package com.example.recipepal.fragments;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
@@ -8,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.recipepal.R;
+import com.example.recipepal.helpers.DatabaseHelper;
 
 import java.util.Locale;
 
@@ -24,6 +28,8 @@ public class InterfaceFragment extends Fragment {
     TextView timer;
     ImageButton pausePlay;
     ImageButton reset;
+    ImageView imageView;
+
     int seconds;
     boolean running;
 
@@ -32,7 +38,7 @@ public class InterfaceFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static InterfaceFragment newInstance(int position, String content, int time) {
+    public static InterfaceFragment newInstance(int position, String content, int time, byte[] image) {
         position++;
 
         InterfaceFragment interfaceFragment = new InterfaceFragment();
@@ -40,6 +46,7 @@ public class InterfaceFragment extends Fragment {
         args.putInt("POSITION", position);
         args.putString("CONTENT", content);
         args.putInt("TIME", time);
+        args.putByteArray("IMAGE", image);
         interfaceFragment.setArguments(args);
         return interfaceFragment;
     }
@@ -60,9 +67,17 @@ public class InterfaceFragment extends Fragment {
         content.setText(contentStr);
         content.setMovementMethod(new ScrollingMovementMethod());
 
+        imageView = view.findViewById(R.id.interactiveRecipeFragmentImageView);
+        byte[] image = getArguments().getByteArray("IMAGE");
+        if (image != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+            imageView.setImageBitmap(bitmap);
+        }
+
         timer = view.findViewById(R.id.interactiveRecipeFragmentTimer);
         pausePlay = view.findViewById(R.id.interactiveRecipeFragmentPausePlay);
         reset = view.findViewById(R.id.interactiveRecipeFragmentReset);
+
         seconds = getArguments().getInt("TIME")*60;
         running = false;
         if (getArguments().getInt("TIME") > 0){
