@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,7 +23,9 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.recipepal.R;
 import com.example.recipepal.activities.RecipeInfoActivity;
+import com.example.recipepal.helpers.DatabaseHelper;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -35,6 +38,7 @@ public class AddInstructionDialog extends AppCompatDialogFragment {
     private ImageView imageView;
     private Button addInstructionPhotoButton;
     private AddInstructionDialogListener listener;
+    private DatabaseHelper databaseHelper;
 
     @NonNull
     @Override
@@ -43,6 +47,7 @@ public class AddInstructionDialog extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_instruction, null);
 
+        databaseHelper = new DatabaseHelper(getContext());
         stepNumEditView = view.findViewById(R.id.stepNumEditView);
         contentEditText = view.findViewById(R.id.contentEditText);
         timerEditText = view.findViewById(R.id.timerEditText);
@@ -58,7 +63,8 @@ public class AddInstructionDialog extends AppCompatDialogFragment {
                         String step = stepNumEditView.getText().toString();
                         String content = contentEditText.getText().toString();
                         String timer = timerEditText.getText().toString();
-                        listener.applyTexts(step, content, timer);
+                        byte[] image = imageViewToByte(imageView);
+                        listener.applyTexts(step, content, timer, image);
                     }
                 });
 
@@ -77,11 +83,23 @@ public class AddInstructionDialog extends AppCompatDialogFragment {
     }
 
     public interface AddInstructionDialogListener {
-        void applyTexts(String step, String content, String timer);
+        void applyTexts(String step, String content, String timer, byte[] image);
     }
 
     public void sendImageBitmap(Bitmap bitmap) {
         imageView.setImageBitmap(bitmap);
         addInstructionPhotoButton.setVisibility(View.GONE);
+    }
+
+    public static byte[] imageViewToByte(ImageView imageView) {
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        if (drawable != null) {
+            Bitmap bitmap = drawable.getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            return byteArray;
+        }
+        return null;
     }
 }

@@ -403,16 +403,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param step
      * @param content
      * @param time
-     * @param imageResource
+     * @param image
      */
-    public void insertInstructionItem(int recipeId, String step, String content, String time, int imageResource) {
-        String sqlInsert = "INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(null, "
-                + recipeId + ", '" + step + "', '" + content + "', '" + time + "', " + imageResource + ")";
-
-        Log.d(TAG, "insertInstructionItem: " + sqlInsert);
-
+    public void insertInstructionItem(int recipeId, String step, String content, String time, byte[] image) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL(sqlInsert);
+
+        if (image == null) {
+            String sqlInsert = "INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(null, "
+                    + recipeId + ", '" + step + "', '" + content + "', '" + time + "', null)";
+            Log.d(TAG, "insertInstructionItem: " + sqlInsert);
+
+            db.execSQL(sqlInsert);
+            db.close();
+        } else {
+            String sqlInsert = "INSERT INTO " + TABLE_INSTRUCTIONS + " VALUES(null, "
+                    + recipeId + ", '" + step + "', '" + content + "', '" + time + "', ?)";
+
+            SQLiteStatement statement = db.compileStatement(sqlInsert);
+            statement.bindBlob(1, image);
+            statement.execute();
+        }
         db.close();
     }
 

@@ -272,7 +272,6 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
                 Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
                 recipeImageView.setImageBitmap(bitmap);
             }
-
         }
 
         setIngredientsListView();
@@ -513,8 +512,8 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     }
 
     @Override
-    public void applyTexts(String step, String content, String timer) {
-        databaseHelper.insertInstructionItem(recipeId, step, content, timer, -1);
+    public void applyTexts(String step, String content, String timer, byte[] image) {
+        databaseHelper.insertInstructionItem(recipeId, step, content, timer, image);
         setInstructionListView();
     }
 
