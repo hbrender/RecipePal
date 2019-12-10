@@ -18,10 +18,12 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -48,6 +50,8 @@ import com.example.recipepal.helpers.DatabaseHelper;
 import com.example.recipepal.helpers.UIUtils;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -262,6 +266,13 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
             } else {
                 servingsTextView.setText(null);
             }
+
+            if (cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.IMAGE)) != null) {
+                byte[] image = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.IMAGE));
+                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+                recipeImageView.setImageBitmap(bitmap);
+            }
+
         }
 
         setIngredientsListView();
@@ -548,6 +559,7 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 recipeImageView.setImageBitmap(selectedImage);
                 addMainRecipePhotoButton.setVisibility(View.GONE);
+                databaseHelper.updateRecipePhoto(recipeId, imageViewToByte(recipeImageView));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -561,5 +573,14 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
                 e.printStackTrace();
             }
         }
+    }
+
+    public static byte[] imageViewToByte(ImageView imageView) {
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 }

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -34,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CHECKED = "checked"; // checked vs unchecked
 
     // columns for Recipe table
-    public static final String IMAGE_RESOURCE = "imageResource";
+    public static final String IMAGE = "image";
     public static final String TIME = "time";
     public static final String SERVINGS = "servings";
     public static final String FAVORITED = "favorited";
@@ -48,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_RECIPE = "CREATE TABLE " + TABLE_RECIPE + "("
             + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + NAME + " TEXT, "
-            + IMAGE_RESOURCE + " INTEGER, "
+            + IMAGE + " BLOB, "
             + TIME + " TEXT, "
             + SERVINGS + " TEXT, "
             + FAVORITED + " INTEGER)";
@@ -60,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + STEP_NUM + " INTEGER, "
             + CONTENT + " TEXT, "
             + TIME + " TIME, "
-            + IMAGE_RESOURCE + " INTEGER, "
+            + IMAGE + " BLOB, "
             + "FOREIGN KEY(" + RECIPE_ID + ") REFERENCES " + TABLE_RECIPE + "(" + ID + "))";
 
     // Ingredient table create statement
@@ -315,6 +316,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(sqlUpdate);
+        db.close();
+    }
+
+    public void updateRecipePhoto(int recipeId, byte[] image) {
+        String sqlUpdate = "UPDATE " + TABLE_RECIPE + " SET "
+                + IMAGE + " = ?"
+                + " WHERE " + ID + " = " + recipeId;
+
+        SQLiteDatabase db = getWritableDatabase();
+        SQLiteStatement statement = db.compileStatement(sqlUpdate);
+
+        statement.bindBlob(1, image);
+        statement.execute();
         db.close();
     }
 
