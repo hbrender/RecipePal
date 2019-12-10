@@ -82,7 +82,7 @@ public class InteractiveRecipeActivity extends AppCompatActivity {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InteractiveRecipeActivity.this.finish();
+                InteractiveRecipeActivity.this.finishAfterTransition();
             }
         });
 

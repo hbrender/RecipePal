@@ -140,7 +140,7 @@ android:divider="?android:dividerHorizontal">
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_columnSpan="2"
-        android:minHeight="?android:attr/listPreferredItemHeight"/>/>
+        android:minHeight="?android:attr/listPreferredItemHeight"/>
 
 </GridLayout>
 </ScrollView>

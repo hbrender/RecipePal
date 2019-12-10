@@ -2,6 +2,7 @@ package com.example.recipepal.fragments;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +14,19 @@ import androidx.fragment.app.Fragment;
 
 import com.example.recipepal.R;
 
+import java.util.Locale;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class InterfaceFragment extends Fragment {
+
+    TextView timer;
+    ImageButton pausePlay;
+    ImageButton reset;
+    int seconds;
+    boolean running;
+
 
     public InterfaceFragment() {
         // Required empty public constructor
@@ -50,23 +60,43 @@ public class InterfaceFragment extends Fragment {
         content.setText(contentStr);
         content.setMovementMethod(new ScrollingMovementMethod());
 
-        TextView timer = view.findViewById(R.id.interactiveRecipeFragmentTimer);
-        ImageButton pausePlay = view.findViewById(R.id.interactiveRecipeFragmentPausePlay);
-        ImageButton reset = view.findViewById(R.id.interactiveRecipeFragmentReset);
-        String time = getArguments().getInt("TIME")+ ":00";
+        timer = view.findViewById(R.id.interactiveRecipeFragmentTimer);
+        pausePlay = view.findViewById(R.id.interactiveRecipeFragmentPausePlay);
+        reset = view.findViewById(R.id.interactiveRecipeFragmentReset);
+        seconds = getArguments().getInt("TIME")*60;
+        running = false;
         if (getArguments().getInt("TIME") > 0){
+            int hours = seconds / 3600;
+            int minutes = (seconds % 3600) / 60;
+            int secs = seconds % 60;
+            String time = String.format(Locale.getDefault(),
+                    "%d:%02d:%02d", hours, minutes, secs);
             timer.setText(time);
             pausePlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO
+                    running = !running;
+                    if (running)
+                        pausePlay.setImageResource(R.drawable.ic_pause_24px);
+                    else
+                        pausePlay.setImageResource(R.drawable.ic_play_arrow_24px);
+
+
                 }
             });
 
             reset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO
+                    running = false;
+                    seconds = getArguments().getInt("TIME")*60;
+                    int hours = seconds / 3600;
+                    int minutes = (seconds % 3600) / 60;
+                    int secs = seconds % 60;
+                    String time = String.format(Locale.getDefault(),
+                            "%d:%02d:%02d", hours, minutes, secs);
+                    timer.setText(time);
+                    pausePlay.setImageResource(R.drawable.ic_play_arrow_24px);
                 }
             });
 
@@ -75,8 +105,39 @@ public class InterfaceFragment extends Fragment {
             pausePlay.setVisibility(View.INVISIBLE);
             reset.setVisibility(View.INVISIBLE);
         }
+        runTimer();
 
         return view;
+    }
+
+    private void runTimer() {
+        final Handler handler = new Handler();
+        // the Runnable interface contains a single method, run()
+        // post means run this code immediately
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                int hours = seconds / 3600;
+                int minutes = (seconds % 3600) / 60;
+                int secs = seconds % 60;
+
+                // format the seconds in H:mm:ss format
+                String time = String.format(Locale.getDefault(),
+                        "%d:%02d:%02d", hours, minutes, secs);
+
+                // update the textview
+                timer.setText(time);
+                // update seconds if we are in a running state
+                if (running) {
+                    seconds--;
+                }
+                // postDelayed means run this code after a delay of 1000 milliseconds
+                // 1 second = 1000 milliseconds
+                handler.postDelayed(this, 1000);
+                // this method will keep getting called while this Activity is running
+            }
+        });
+
     }
 
 }
