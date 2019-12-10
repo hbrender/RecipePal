@@ -14,7 +14,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="Step 1:"
-        android:textSize="30sp"
+        android:textSize="38sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/interactiveRecipeFragmentImageView" />
 
@@ -28,7 +28,7 @@
         android:layout_marginBottom="24dp"
         android:scrollbars="vertical"
         android:text="Preheat oven to 350 degrees."
-        android:textSize="18sp"
+        android:textSize="19sp"
         app:layout_constraintBottom_toTopOf="@+id/interactiveRecipeFragmentTimer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

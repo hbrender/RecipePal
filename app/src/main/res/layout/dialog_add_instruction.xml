@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="15dp">
+    android:padding="15dp"
+    android:columnCount="2">
+
+    <TextView
+        android:hint="@string/step"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="1"
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/stepNumEditView"
-        android:hint="@string/step"
+        android:hint="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_columnSpan="1"
         android:inputType="number" />
 
     <EditText
         android:id="@+id/contentEditText"
-        android:hint="@string/content"
+        android:hint="content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_columnSpan="2"
         android:inputType="textMultiLine"/>
+
+    <TextView
+        android:hint="Timer:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="1"
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/timerEditText"
-        android:hint="time for timer"
+        android:hint="@string/minutes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="time"/>
+        android:layout_columnSpan="1"
+        android:inputType="number"/>
 
     <Button
         android:id="@+id/addInstructionPhotoButton"
         android:text="@string/add_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_columnSpan="2"
         android:onClick="addInstructionPhotoButtonOnClick"
         android:textColor="@color/colorPrimaryDark"
         android:drawableLeft="@drawable/ic_add_24dp"
@@ -39,7 +57,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
-</LinearLayout>
+        android:layout_columnSpan="2"
+        android:layout_gravity="center|fill_horizontal"/>
+</GridLayout>

@@ -332,6 +332,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateInstructionItem(int recipeId, String step, String content, String time, byte[] image) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        if (image == null) {
+            String sqlInsert = "UPDATE " + TABLE_INSTRUCTIONS + " SET "
+                    + STEP_NUM + " = '" + step + "', "
+                    + CONTENT + " = '" + content + "', "
+                    + TIME + " = '" + time + "', "
+                    + IMAGE + " = null"
+                    + " WHERE " + ID + " = " + recipeId;
+            Log.d(TAG, "insertInstructionItem: " + sqlInsert);
+            db.execSQL(sqlInsert);
+            db.close();
+        } else {
+            String sqlInsert = "UPDATE " + TABLE_INSTRUCTIONS + " SET "
+                    + STEP_NUM + " = '" + step + "', "
+                    + CONTENT + " = '" + content + "', "
+                    + TIME + " = '" + time + "', "
+                    + IMAGE + " = ?"
+                    + " WHERE " + ID + " = " + recipeId;
+
+            SQLiteStatement statement = db.compileStatement(sqlInsert);
+            statement.bindBlob(1, image);
+            statement.execute();
+        }
+        db.close();
+    }
+
     /**
      * Insert ingredient into the grocery list
      * @param ingredientId

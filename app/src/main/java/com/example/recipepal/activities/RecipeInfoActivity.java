@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
@@ -60,6 +61,7 @@ import java.io.InputStream;
 //https://stackoverflow.com/questions/6912237/how-to-return-to-default-style-on-edittext-if-i-apply-a-background (referenced for making edittext look like textview)
 //https://stackoverflow.com/questions/16337063/how-to-change-the-default-disabled-edittexts-style (referenced for setting edittext disabled colors)
 //https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview (referenced for adding photos from photo gallery)
+//https://github.com/quocvn/food-sqlite-demo (referenced for adding image to DB)
 
 public class RecipeInfoActivity extends AppCompatActivity implements AddIngredientDialog.AddIngredientDialogListener, AddInstructionDialog.AddInstructionDialogListener {
     static final String TAG = "RecipeActivityTag";
@@ -97,7 +99,6 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         setContentView(R.layout.activity_recipe_info);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // home button
-        //getSupportActionBar().setDisplayShowTitleEnabled(false); // no title
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -187,6 +188,80 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
+            }
+        });
+
+        instructionListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        instructionListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                int numChecked = instructionListView.getCheckedItemCount();
+                mode.setTitle(numChecked + " instructions selected");
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater menuInflater = getMenuInflater();
+                menuInflater.inflate(R.menu.cam_menu, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.deleteMenuItem:
+                        final long[] checkIds = instructionListView.getCheckedItemIds();
+
+                        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(RecipeInfoActivity.this);
+                        alertBuilder.setTitle(getString(R.string.delete_instruction))
+                                .setMessage(getString(R.string.delete_instruction_message))
+                                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // delete all selected instructions
+                                        for (long id: checkIds) {
+                                            databaseHelper.deleteInstructionById((int) id);
+                                            setInstructionListView(); // update list view
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, null);
+                        alertBuilder.show();
+
+                        mode.finish(); // exit cam
+                        return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+            }
+        });
+    }
+
+    /**
+     * Sets onClick listeners for ingredients list view and instructions list view
+     */
+    public void setOnItemClickListeners() {
+        instructionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+
+                int selectedId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ID));
+                String step = cursor.getString(cursor.getColumnIndex(DatabaseHelper.STEP_NUM));
+                String content = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CONTENT));
+                String timer = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TIME));
+                byte[] image = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.IMAGE));
+
+                dialog = new AddInstructionDialog(selectedId, step, content, timer, image);
+                dialog.show(getSupportFragmentManager(), "Add instruction");
             }
         });
 
@@ -365,7 +440,6 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     }
 
     public void disableEditing() {
-        Log.d(TAG, "disableEditing: here");
         recipeNameTextView.setEnabled(false);
         totalTimeTextView.setEnabled(false);
         servingsTextView.setEnabled(false);
@@ -392,6 +466,9 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
         ingredientsListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
         instructionListView.clearChoices();
         instructionListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+
+        ingredientsListView.setOnItemClickListener(null);
+        instructionListView.setOnItemClickListener(null);
     }
 
     public void enableEditing() {
@@ -414,6 +491,9 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
 
         // CAM for list views
         setMultiChoiceModeListeners();
+
+        // item on click for list views
+        setOnItemClickListeners();
     }
 
     public void saveRecipeInfo() {
@@ -512,8 +592,12 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     }
 
     @Override
-    public void applyTexts(String step, String content, String timer, byte[] image) {
-        databaseHelper.insertInstructionItem(recipeId, step, content, timer, image);
+    public void applyTexts(int instructionId, String step, String content, String timer, byte[] image) {
+        if (instructionId == -1) {
+            databaseHelper.insertInstructionItem(recipeId, step, content, timer, image);
+        } else {
+            databaseHelper.updateInstructionItem(instructionId, step, content, timer, image);
+        }
         setInstructionListView();
     }
 
