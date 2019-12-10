@@ -2,6 +2,7 @@ package com.example.recipepal.fragments;
 
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class InterfaceFragment extends Fragment {
         TextView content = view.findViewById(R.id.interactiveRecipeFragmentContent);
         String contentStr = getArguments().getString("CONTENT");
         content.setText(contentStr);
+        content.setMovementMethod(new ScrollingMovementMethod());
 
         TextView timer = view.findViewById(R.id.interactiveRecipeFragmentTimer);
         ImageButton pausePlay = view.findViewById(R.id.interactiveRecipeFragmentPausePlay);
