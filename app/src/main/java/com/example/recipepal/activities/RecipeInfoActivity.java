@@ -414,7 +414,11 @@ public class RecipeInfoActivity extends AppCompatActivity implements AddIngredie
     }
 
     public void startRecipeButtonOnClick(View view) {
-        Toast.makeText(this, "TODO: start recipe", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, InteractiveRecipeActivity.class);
+
+        intent.putExtra("ID", recipeId);
+
+        startActivity(intent);
     }
 
     public void addIngredientButtonOnClick(View view) {
